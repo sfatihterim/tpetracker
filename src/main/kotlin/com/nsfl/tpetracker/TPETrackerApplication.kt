@@ -7,13 +7,17 @@ import org.springframework.web.bind.annotation.RestController
 import org.jsoup.Jsoup
 import java.util.regex.Pattern
 
+private const val PLAYERS_HTML = "<!DOCTYPE html><html><head><title>%s</title><link rel=\"stylesheet\" type=\"text/css\" href=\"https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/semantic.min.css\"><link rel=\"stylesheet\" type=\"text/css\" href=\"https://cdn.datatables.net/1.10.19/css/dataTables.semanticui.min.css\"><script type=\"text/javascript\" language=\"javascript\" src=\"https://code.jquery.com/jquery-3.3.1.js\"></script><script type=\"text/javascript\" language=\"javascript\" src=\"https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js\"></script><script type=\"text/javascript\" language=\"javascript\" src=\"https://cdn.datatables.net/1.10.19/js/dataTables.semanticui.min.js\"></script><script type=\"text/javascript\" language=\"javascript\" src=\"https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/semantic.min.js\"></script><script type=\"text/javascript\" class=\"init\">;var dataSet=[%s];\$(document).ready(function(){\$('#example').DataTable({paging:false,order: [[4, \"desc\"]],data:dataSet,columns:[{ title: 'Draft Year' }, { title: 'Team' }, { title: 'Name' }, { title: 'Position' }, { title: 'TPE' }]})});</script><style>div{padding:8px}</style></head><body><div><table id=\"example\" class=\"ui celled table\" width=\"100%%\"></table></div></body></html>"
+private const val TEAM_HTML = "<!DOCTYPE html><html><head><title>%s</title><link rel=\"stylesheet\" type=\"text/css\" href=\"https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/semantic.min.css\"><link rel=\"stylesheet\" type=\"text/css\" href=\"https://cdn.datatables.net/1.10.19/css/dataTables.semanticui.min.css\"><script type=\"text/javascript\" language=\"javascript\" src=\"https://code.jquery.com/jquery-3.3.1.js\"></script><script type=\"text/javascript\" language=\"javascript\" src=\"https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js\"></script><script type=\"text/javascript\" language=\"javascript\" src=\"https://cdn.datatables.net/1.10.19/js/dataTables.semanticui.min.js\"></script><script type=\"text/javascript\" language=\"javascript\" src=\"https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/semantic.min.js\"></script><script type=\"text/javascript\" class=\"init\">;var dataSet=[%s];\$(document).ready(function(){\$('#example').DataTable({paging:false,order: [[3, \"desc\"]],data:dataSet,columns:[{ title: 'Draft Year' }, { title: 'Name' }, { title: 'Position' }, { title: 'TPE' }]})});</script><style>div{padding:8px}</style></head><body><div><table id=\"example\" class=\"ui celled table\" width=\"100%%\"></table></div></body></html>"
+
 @RestController
 @SpringBootApplication
 class TpeTrackerApplication {
 
     @RequestMapping
     fun getIndex() =
-            "<a href=\"/all_players\">All Players</a><br><br>" +
+            "<title>TPE Tracker Index</title>" +
+                    "<a href=\"/all_players\">All Players</a><br><br>" +
                     "<a href=\"/baltimore_hawks\">Baltimore Hawks</a><br><br>" +
                     "<a href=\"/colorado_yeti\">Colorado Yeti</a><br><br>" +
                     "<a href=\"/philadelphia_liberty\">Philadelphia Liberty</a><br><br>" +
@@ -24,7 +28,7 @@ class TpeTrackerApplication {
                     "<a href=\"/san_jose_sabercats\">San Jose SaberCats</a><br><br>"
 
     @RequestMapping("/all_players")
-    fun getAllPlayers() = createPlayersHTLM(
+    fun getAllPlayers() = createPlayersHTML(
             parsePlayers(Team.BALTIMORE_HAWKS),
             parsePlayers(Team.COLORADO_YETI),
             parsePlayers(Team.PHILADELPHIA_LIBERTY),
@@ -36,64 +40,55 @@ class TpeTrackerApplication {
     )
 
     @RequestMapping("/baltimore_hawks")
-    fun getBaltimoreHawksRoster() = createTeamHTLM(parsePlayers(Team.BALTIMORE_HAWKS))
+    fun getBaltimoreHawksRoster() = createTeamHTML(Team.BALTIMORE_HAWKS)
 
     @RequestMapping("/colorado_yeti")
-    fun getColoradoYetiRoster() = createTeamHTLM(parsePlayers(Team.COLORADO_YETI))
+    fun getColoradoYetiRoster() = createTeamHTML(Team.COLORADO_YETI)
 
     @RequestMapping("/philadelphia_liberty")
-    fun getPhiladelphiaLibertyRoster() = createTeamHTLM(parsePlayers(Team.PHILADELPHIA_LIBERTY))
+    fun getPhiladelphiaLibertyRoster() = createTeamHTML(Team.PHILADELPHIA_LIBERTY)
 
     @RequestMapping("/yellowknife_wraiths")
-    fun getYellowknifeWraithsRoster() = createTeamHTLM(parsePlayers(Team.YELLOWKNIFE_WRAITHS))
+    fun getYellowknifeWraithsRoster() = createTeamHTML(Team.YELLOWKNIFE_WRAITHS)
 
     @RequestMapping("/arizona_outlaws")
-    fun getArizonaOutlawsRoster() = createTeamHTLM(parsePlayers(Team.ARIZONA_OUTLAWS))
+    fun getArizonaOutlawsRoster() = createTeamHTML(Team.ARIZONA_OUTLAWS)
 
     @RequestMapping("/new_orleans_second_line")
-    fun getNewOrleansSecondLineRoster() = createTeamHTLM(parsePlayers(Team.NEW_ORLEANS_SECOND_LINE))
+    fun getNewOrleansSecondLineRoster() = createTeamHTML(Team.NEW_ORLEANS_SECOND_LINE)
 
     @RequestMapping("/orange_county_otters")
-    fun getOrangeCountyOttersRoster() = createTeamHTLM(parsePlayers(Team.ORANGE_COUNTY_OTTERS))
+    fun getOrangeCountyOttersRoster() = createTeamHTML(Team.ORANGE_COUNTY_OTTERS)
 
     @RequestMapping("/san_jose_sabercats")
-    fun getSanJoseSaberCatsRoster() = createTeamHTLM(parsePlayers(Team.SAN_JOSE_SABERCATS))
+    fun getSanJoseSaberCatsRoster() = createTeamHTML(Team.SAN_JOSE_SABERCATS)
 
-    private fun createPlayersHTLM(vararg playerLists: List<Player>): String {
+    private fun createPlayersHTML(vararg playerLists: List<Player>) =
+            PLAYERS_HTML.format(
+                    "All Players",
+                    playerLists.joinToString(",") { playerList ->
+                        playerList.joinToString(",") {
+                            "['${it.draftYear}','<a href=\"${it.team.url}\">${it.team.full}</a>','<a href=\"${it.url}\">${it.name}</a>','${it.position.full}','${it.tpe}']"
+                        }
+                    }
+            )
 
-        val htmlStart = "<!DOCTYPE html><html><head><link rel=\"stylesheet\" type=\"text/css\" href=\"https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/semantic.min.css\"><link rel=\"stylesheet\" type=\"text/css\" href=\"https://cdn.datatables.net/1.10.19/css/dataTables.semanticui.min.css\"><script type=\"text/javascript\" language=\"javascript\" src=\"https://code.jquery.com/jquery-3.3.1.js\"></script><script type=\"text/javascript\" language=\"javascript\" src=\"https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js\"></script><script type=\"text/javascript\" language=\"javascript\" src=\"https://cdn.datatables.net/1.10.19/js/dataTables.semanticui.min.js\"></script><script type=\"text/javascript\" language=\"javascript\" src=\"https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/semantic.min.js\"></script><script type=\"text/javascript\" class=\"init\">;var dataSet=["
-        val htmlEnd = "];\$(document).ready(function(){\$('#example').DataTable({paging:false,order: [[4, \"desc\"]],data:dataSet,columns:[{ title: 'Draft Year' }, { title: 'Team' }, { title: 'Name' }, { title: 'Position' }, { title: 'TPE' }]})});</script><style>div{padding:8px}</style></head><body><div><table id=\"example\" class=\"ui celled table\" width=\"100%\"></table></div></body></html>"
-
-        val playerData = playerLists.joinToString(",") { playerList ->
-            playerList.joinToString(",") {
-                "['${it.draftYear}','${it.teamName}','${it.name}','${it.position}','${it.tpe}']"
-
-            }
-        }
-
-        return htmlStart + playerData + htmlEnd
-    }
-
-    private fun createTeamHTLM(playerList: List<Player>): String {
-
-        val htmlStart = "<!DOCTYPE html><html><head><link rel=\"stylesheet\" type=\"text/css\" href=\"https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/semantic.min.css\"><link rel=\"stylesheet\" type=\"text/css\" href=\"https://cdn.datatables.net/1.10.19/css/dataTables.semanticui.min.css\"><script type=\"text/javascript\" language=\"javascript\" src=\"https://code.jquery.com/jquery-3.3.1.js\"></script><script type=\"text/javascript\" language=\"javascript\" src=\"https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js\"></script><script type=\"text/javascript\" language=\"javascript\" src=\"https://cdn.datatables.net/1.10.19/js/dataTables.semanticui.min.js\"></script><script type=\"text/javascript\" language=\"javascript\" src=\"https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/semantic.min.js\"></script><script type=\"text/javascript\" class=\"init\">;var dataSet=["
-        val htmlEnd = "];\$(document).ready(function(){\$('#example').DataTable({paging:false,order: [[3, \"desc\"]],data:dataSet,columns:[{ title: 'Draft Year' }, { title: 'Name' }, { title: 'Position' }, { title: 'TPE' }]})});</script><style>div{padding:8px}</style></head><body><div><table id=\"example\" class=\"ui celled table\" width=\"100%\"></table></div></body></html>"
-
-        val playerData = playerList.joinToString(",") {
-            "['${it.draftYear}','${it.name}','${it.position}','${it.tpe}']"
-        }
-
-        return htmlStart + playerData + htmlEnd
-    }
+    private fun createTeamHTML(team: Team) =
+            TEAM_HTML.format(
+                    team.full,
+                    parsePlayers(team).joinToString(",") {
+                        "['${it.draftYear}','<a href=\"${it.url}\">${it.name}</a>','${it.position.full}','${it.tpe}']"
+                    }
+            )
 
     private fun parsePlayers(team: Team): List<Player> {
 
         val playerList = ArrayList<Player>()
 
         listOf(
-                Jsoup.connect("http://nsfl.jcink.net/index.php?showforum=${team.teamId}").get(),
-                Jsoup.connect("http://nsfl.jcink.net/index.php?showforum=${team.teamId}&st=15").get(),
-                Jsoup.connect("http://nsfl.jcink.net/index.php?showforum=${team.teamId}&st=30").get()
+                Jsoup.connect("http://nsfl.jcink.net/index.php?showforum=${team.id}").get(),
+                Jsoup.connect("http://nsfl.jcink.net/index.php?showforum=${team.id}&st=15").get(),
+                Jsoup.connect("http://nsfl.jcink.net/index.php?showforum=${team.id}&st=30").get()
         ).forEach { document ->
             document.body().getElementById("topic-list").allElements
                     .filter { element ->
@@ -104,14 +99,20 @@ class TpeTrackerApplication {
                     }.forEach { element ->
                         element.toString().let {
                             val playerInfo = parsePlayerInfo(it).split("-")
-                            val tpe = parseTPE(it)
                             playerList.add(
                                     Player(
-                                            playerInfo[0].trim(),
-                                            team.teamName,
                                             playerInfo[1].trim(),
+                                            team,
                                             Position.fromAbbreviation(playerInfo[2].trim()),
-                                            tpe
+                                            playerInfo[0].trim().let { info ->
+                                                if (info.length == 2) {
+                                                    "S0${info.substring(1)}"
+                                                } else {
+                                                    info
+                                                }
+                                            },
+                                            parseTPE(it),
+                                            parseUrl(it)
                                     )
                             )
                         }
@@ -123,7 +124,7 @@ class TpeTrackerApplication {
 
     private fun parsePlayerInfo(elementString: String): String {
 
-        val startIndex = elementString.indexOf(">(S") + 3
+        val startIndex = elementString.indexOf(">(S") + 1
         val endIndex = elementString.indexOf("<", startIndex)
 
         return elementString.substring(startIndex, endIndex)
@@ -142,28 +143,36 @@ class TpeTrackerApplication {
                 .replace(Pattern.compile("[^0-9.]").toRegex(), "")
                 .toInt()
     }
+
+    private fun parseUrl(elementString: String): String {
+        val startIndex = elementString.indexOf("href=") + 6
+        val endIndex = elementString.indexOf("\"", startIndex)
+        return elementString.substring(startIndex, endIndex)
+    }
 }
 
 class Player(
-        val draftYear: String,
-        val teamName: String,
         val name: String,
-        val position: String,
-        val tpe: Int
+        val team: Team,
+        val position: Position,
+        val draftYear: String,
+        val tpe: Int,
+        val url: String
 )
 
 enum class Team(
-        val teamId: String,
-        val teamName: String
+        val id: String,
+        val url: String,
+        val full: String
 ) {
-    BALTIMORE_HAWKS("69", "Baltimore Hawks"),
-    COLORADO_YETI("55", "Colorado Yeti"),
-    PHILADELPHIA_LIBERTY("110", "Philadelphia Liberty"),
-    YELLOWKNIFE_WRAITHS("57", "Yellowknife Wraiths"),
-    ARIZONA_OUTLAWS("72", "Arizona Outlaws"),
-    NEW_ORLEANS_SECOND_LINE("113", "New Orleans Second Line"),
-    ORANGE_COUNTY_OTTERS("53", "Orange County Otters"),
-    SAN_JOSE_SABERCATS("51", "San Jose SaberCats")
+    BALTIMORE_HAWKS("69", "/baltimore_hawks", "Baltimore Hawks"),
+    COLORADO_YETI("55", "/colorado_yeti", "Colorado Yeti"),
+    PHILADELPHIA_LIBERTY("110", "/philadelphia_liberty", "Philadelphia Liberty"),
+    YELLOWKNIFE_WRAITHS("57", "/yellowknife_wraiths", "Yellowknife Wraiths"),
+    ARIZONA_OUTLAWS("72", "/arizona_outlaws", "Arizona Outlaws"),
+    NEW_ORLEANS_SECOND_LINE("113", "/new_orleans_second_line", "New Orleans Second Line"),
+    ORANGE_COUNTY_OTTERS("53", "/orange_county_otters", "Orange County Otters"),
+    SAN_JOSE_SABERCATS("51", "/san_jose_sabercats", "San Jose SaberCats")
 }
 
 enum class Position(
@@ -180,11 +189,12 @@ enum class Position(
     LB("LB", "Linebacker"),
     CB("CB", "Cornerback"),
     S("S", "Safety"),
-    KP("K/P", "Kicker/Punter");
+    KP("K/P", "Kicker/Punter"),
+    UNKNOWN("", "Unknown");
 
     companion object {
         fun fromAbbreviation(abbreviation: String) =
-                values().firstOrNull { it.abbreviation == abbreviation }?.full ?: ""
+                values().firstOrNull { it.abbreviation == abbreviation } ?: UNKNOWN
     }
 }
 
