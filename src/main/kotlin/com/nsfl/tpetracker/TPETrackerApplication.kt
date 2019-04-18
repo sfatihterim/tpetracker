@@ -8,7 +8,7 @@ import org.jsoup.Jsoup
 import java.util.regex.Pattern
 
 private const val PLAYERS_HTML = "<!DOCTYPE html><html><head><title>%s</title><link rel=\"stylesheet\" type=\"text/css\" href=\"https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/semantic.min.css\"><link rel=\"stylesheet\" type=\"text/css\" href=\"https://cdn.datatables.net/1.10.19/css/dataTables.semanticui.min.css\"><script type=\"text/javascript\" language=\"javascript\" src=\"https://code.jquery.com/jquery-3.3.1.js\"></script><script type=\"text/javascript\" language=\"javascript\" src=\"https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js\"></script><script type=\"text/javascript\" language=\"javascript\" src=\"https://cdn.datatables.net/1.10.19/js/dataTables.semanticui.min.js\"></script><script type=\"text/javascript\" language=\"javascript\" src=\"https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/semantic.min.js\"></script><script type=\"text/javascript\" class=\"init\">;var dataSet=[%s];\$(document).ready(function(){\$('#example').DataTable({paging:false,order: [[4, \"desc\"]],data:dataSet,columns:[{ title: 'Draft Year' }, { title: 'Team' }, { title: 'Name' }, { title: 'Position' }, { title: 'TPE' }]})});</script><style>div{padding:8px}</style></head><body><div><table id=\"example\" class=\"ui celled table\" width=\"100%%\"></table></div></body></html>"
-private const val TEAM_HTML = "<!DOCTYPE html><html><head><title>%s</title><link rel=\"stylesheet\" type=\"text/css\" href=\"https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/semantic.min.css\"><link rel=\"stylesheet\" type=\"text/css\" href=\"https://cdn.datatables.net/1.10.19/css/dataTables.semanticui.min.css\"><script type=\"text/javascript\" language=\"javascript\" src=\"https://code.jquery.com/jquery-3.3.1.js\"></script><script type=\"text/javascript\" language=\"javascript\" src=\"https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js\"></script><script type=\"text/javascript\" language=\"javascript\" src=\"https://cdn.datatables.net/1.10.19/js/dataTables.semanticui.min.js\"></script><script type=\"text/javascript\" language=\"javascript\" src=\"https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/semantic.min.js\"></script><script type=\"text/javascript\" class=\"init\">;var dataSet=[%s];\$(document).ready(function(){\$('#example').DataTable({paging:false,order: [[3, \"desc\"]],data:dataSet,columns:[{ title: 'Draft Year' }, { title: 'Name' }, { title: 'Position' }, { title: 'TPE' }]})});</script><style>div{padding:8px}</style></head><body><div><h1>%s</h1><table id=\"example\" class=\"ui celled table\" width=\"100%%\"></table></div></body></html>"
+private const val TEAM_HTML = "<!DOCTYPE html><html><head><title>%s</title><link rel=\"stylesheet\" type=\"text/css\" href=\"https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/semantic.min.css\"><link rel=\"stylesheet\" type=\"text/css\" href=\"https://cdn.datatables.net/1.10.19/css/dataTables.semanticui.min.css\"><script type=\"text/javascript\" language=\"javascript\" src=\"https://code.jquery.com/jquery-3.3.1.js\"></script><script type=\"text/javascript\" language=\"javascript\" src=\"https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js\"></script><script type=\"text/javascript\" language=\"javascript\" src=\"https://cdn.datatables.net/1.10.19/js/dataTables.semanticui.min.js\"></script><script type=\"text/javascript\" language=\"javascript\" src=\"https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/semantic.min.js\"></script><script type=\"text/javascript\" class=\"init\">;var dataSet=[%s];\$(document).ready(function(){\$('#example').DataTable({paging:false,order: [[3, \"desc\"]],data:dataSet,columns:[{ title: 'Draft Year' }, { title: 'Name' }, { title: 'Position' }, { title: 'TPE' }]})});</script><style>div{padding:8px}</style></head><body><div><h2>%s</h2><table id=\"example\" class=\"ui celled table\" width=\"100%%\"></table></div></body></html>"
 
 @RestController
 @SpringBootApplication
@@ -25,7 +25,13 @@ class TpeTrackerApplication {
                     "<a href=\"/arizona_outlaws\">Arizona Outlaws</a><br><br>" +
                     "<a href=\"/new_orleans_second_line\">New Orleans Second Line</a><br><br>" +
                     "<a href=\"/orange_county_otters\">Orange County Otters</a><br><br>" +
-                    "<a href=\"/san_jose_sabercats\">San Jose SaberCats</a><br><br>"
+                    "<a href=\"/san_jose_sabercats\">San Jose SaberCats</a><br><br>" +
+                    "<a href=\"/palm_beach_solar_bears\">Palm Beach Solar Bears</a><br><br>" +
+                    "<a href=\"/kansas_city_coyotes\">Kansas City Coyotes</a><br><br>" +
+                    "<a href=\"/portland_pythons\">Portland Pythons</a><br><br>" +
+                    "<a href=\"/norfolk_seawolves\">Norfolk SeaWolves</a><br><br>" +
+                    "<a href=\"/san_antonio_marshals\">San Antonio Marshals</a><br><br>" +
+                    "<a href=\"/tijuana_luchadores\">Tijuana Luchadores</a><br><br>"
 
     @RequestMapping("/all_players")
     fun getAllPlayers() = createPlayersHTML(
@@ -36,7 +42,13 @@ class TpeTrackerApplication {
             parsePlayers(Team.ARIZONA_OUTLAWS),
             parsePlayers(Team.NEW_ORLEANS_SECOND_LINE),
             parsePlayers(Team.ORANGE_COUNTY_OTTERS),
-            parsePlayers(Team.SAN_JOSE_SABERCATS)
+            parsePlayers(Team.SAN_JOSE_SABERCATS),
+            parsePlayers(Team.PALM_BEACH_SOLAR_BEARS),
+            parsePlayers(Team.KANSAS_CITY_COYOTES),
+            parsePlayers(Team.PORTLAND_PYTHONS),
+            parsePlayers(Team.NORFOLK_SEAWOLVES),
+            parsePlayers(Team.SAN_ANTONIO_MARSHALS),
+            parsePlayers(Team.TIJUANA_LUCHADORES)
     )
 
     @RequestMapping("/baltimore_hawks")
@@ -62,6 +74,24 @@ class TpeTrackerApplication {
 
     @RequestMapping("/san_jose_sabercats")
     fun getSanJoseSaberCatsRoster() = createTeamHTML(Team.SAN_JOSE_SABERCATS)
+
+    @RequestMapping("/palm_beach_solar_bears")
+    fun getPalmBeachSolarBearsRoster() = createTeamHTML(Team.PALM_BEACH_SOLAR_BEARS)
+
+    @RequestMapping("/kansas_city_coyotes")
+    fun getKansasCityCoyotesRoster() = createTeamHTML(Team.KANSAS_CITY_COYOTES)
+
+    @RequestMapping("/portland_pythons")
+    fun getPortlandPythonsRoster() = createTeamHTML(Team.PORTLAND_PYTHONS)
+
+    @RequestMapping("/norfolk_seawolves")
+    fun getNorfolkSeawolvesRoster() = createTeamHTML(Team.NORFOLK_SEAWOLVES)
+
+    @RequestMapping("/san_antonio_marshals")
+    fun getSanAntonioMarshalsRoster() = createTeamHTML(Team.SAN_ANTONIO_MARSHALS)
+
+    @RequestMapping("/tijuana_luchadores")
+    fun getTijuanaLuchadoresRoster() = createTeamHTML(Team.TIJUANA_LUCHADORES)
 
     private fun createPlayersHTML(vararg playerLists: List<Player>) =
             PLAYERS_HTML.format(
@@ -177,7 +207,13 @@ enum class Team(
     ARIZONA_OUTLAWS("72", "/arizona_outlaws", "Arizona Outlaws"),
     NEW_ORLEANS_SECOND_LINE("113", "/new_orleans_second_line", "New Orleans Second Line"),
     ORANGE_COUNTY_OTTERS("53", "/orange_county_otters", "Orange County Otters"),
-    SAN_JOSE_SABERCATS("51", "/san_jose_sabercats", "San Jose SaberCats")
+    SAN_JOSE_SABERCATS("51", "/san_jose_sabercats", "San Jose SaberCats"),
+    PALM_BEACH_SOLAR_BEARS("160", "/palm_beach_solar_bears", "Palm Beach Solar Bears"),
+    KANSAS_CITY_COYOTES("158", "/kansas_city_coyotes", "Kansas City Coyotes"),
+    PORTLAND_PYTHONS("164", "/portland_pythons", "Portland Pythons"),
+    NORFOLK_SEAWOLVES("162", "/norfolk_seawolves", "Norfolk SeaWolves"),
+    SAN_ANTONIO_MARSHALS("156", "/san_antonio_marshals", "San Antonio Marshals"),
+    TIJUANA_LUCHADORES("154", "/tijuana_luchadores", "Tijuana Luchadores")
 }
 
 enum class Position(
