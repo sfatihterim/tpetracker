@@ -1,6 +1,7 @@
 package com.nsfl.tpetracker
 
 import org.jsoup.Jsoup
+import org.jsoup.nodes.Document
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 import org.springframework.scheduling.annotation.EnableScheduling
@@ -31,34 +32,41 @@ class TpeTrackerApplication {
     private var norfolkSeawolvesRoster = ArrayList<Player>()
     private var sanAntonioMarshalsRoster = ArrayList<Player>()
     private var tijuanaLuchadoresRoster = ArrayList<Player>()
+    private var freeAgentsRoster = ArrayList<Player>()
 
     @Scheduled(fixedRate = 6 * 60 * 60000)
     fun refreshData() {
-        baltimoreHawksRoster = parsePlayers(Team.BALTIMORE_HAWKS)
-        coloradoYetiRoster = parsePlayers(Team.COLORADO_YETI)
-        philadelphiaLibertyRoster = parsePlayers(Team.PHILADELPHIA_LIBERTY)
-        yellowknifeWraithsRoster = parsePlayers(Team.YELLOWKNIFE_WRAITHS)
-        arizonaOutlawsRoster = parsePlayers(Team.ARIZONA_OUTLAWS)
-        newOrleansSecondLineRoster = parsePlayers(Team.NEW_ORLEANS_SECOND_LINE)
-        orangeCountyOttersRoster = parsePlayers(Team.ORANGE_COUNTY_OTTERS)
-        sanJoseSabercatsRoster = parsePlayers(Team.SAN_JOSE_SABERCATS)
-        palmBeachSolarBearsRoster = parsePlayers(Team.PALM_BEACH_SOLAR_BEARS)
-        kansasCityCoyotesRoster = parsePlayers(Team.KANSAS_CITY_COYOTES)
-        portlandPythonsRoster = parsePlayers(Team.PORTLAND_PYTHONS)
-        norfolkSeawolvesRoster = parsePlayers(Team.NORFOLK_SEAWOLVES)
-        sanAntonioMarshalsRoster = parsePlayers(Team.SAN_ANTONIO_MARSHALS)
-        tijuanaLuchadoresRoster = parsePlayers(Team.TIJUANA_LUCHADORES)
+        baltimoreHawksRoster = parsePlayers(Team.BALTIMORE_HAWKS, 3)
+        coloradoYetiRoster = parsePlayers(Team.COLORADO_YETI, 3)
+        philadelphiaLibertyRoster = parsePlayers(Team.PHILADELPHIA_LIBERTY, 3)
+        yellowknifeWraithsRoster = parsePlayers(Team.YELLOWKNIFE_WRAITHS, 3)
+        arizonaOutlawsRoster = parsePlayers(Team.ARIZONA_OUTLAWS, 3)
+        newOrleansSecondLineRoster = parsePlayers(Team.NEW_ORLEANS_SECOND_LINE, 3)
+        orangeCountyOttersRoster = parsePlayers(Team.ORANGE_COUNTY_OTTERS, 3)
+        sanJoseSabercatsRoster = parsePlayers(Team.SAN_JOSE_SABERCATS, 3)
+        palmBeachSolarBearsRoster = parsePlayers(Team.PALM_BEACH_SOLAR_BEARS, 3)
+        kansasCityCoyotesRoster = parsePlayers(Team.KANSAS_CITY_COYOTES, 3)
+        portlandPythonsRoster = parsePlayers(Team.PORTLAND_PYTHONS, 3)
+        norfolkSeawolvesRoster = parsePlayers(Team.NORFOLK_SEAWOLVES, 3)
+        sanAntonioMarshalsRoster = parsePlayers(Team.SAN_ANTONIO_MARSHALS, 3)
+        tijuanaLuchadoresRoster = parsePlayers(Team.TIJUANA_LUCHADORES, 3)
+        freeAgentsRoster = parsePlayers(Team.FREE_AGENTS, 5)
     }
 
-    private fun parsePlayers(team: Team): ArrayList<Player> {
+    private fun parsePlayers(team: Team, pageCount: Int): ArrayList<Player> {
 
         val playerList = ArrayList<Player>()
+        val documentList = ArrayList<Document>()
 
-        listOf(
-                Jsoup.connect("http://nsfl.jcink.net/index.php?showforum=${team.id}").get(),
-                Jsoup.connect("http://nsfl.jcink.net/index.php?showforum=${team.id}&st=15").get(),
-                Jsoup.connect("http://nsfl.jcink.net/index.php?showforum=${team.id}&st=30").get()
-        ).forEach { document ->
+        for (i in 0..(pageCount - 1)) {
+            documentList.add(
+                    Jsoup.connect(
+                            "http://nsfl.jcink.net/index.php?showforum=${team.id}&st=${i * 15}"
+                    ).get()
+            )
+        }
+
+        documentList.forEach { document ->
             document.body().getElementById("topic-list").allElements
                     .filter { element ->
                         element.toString().let {
@@ -145,7 +153,8 @@ class TpeTrackerApplication {
                     "<a href=\"/portland_pythons\">Portland Pythons</a><br><br>" +
                     "<a href=\"/norfolk_seawolves\">Norfolk SeaWolves</a><br><br>" +
                     "<a href=\"/san_antonio_marshals\">San Antonio Marshals</a><br><br>" +
-                    "<a href=\"/tijuana_luchadores\">Tijuana Luchadores</a><br><br>"
+                    "<a href=\"/tijuana_luchadores\">Tijuana Luchadores</a><br><br>" +
+                    "<a href=\"/free_agents\">Free Agents</a><br><br>"
 
     @RequestMapping("/all_players")
     fun getAllPlayers() = createPlayersHTML(
@@ -162,7 +171,8 @@ class TpeTrackerApplication {
             portlandPythonsRoster,
             norfolkSeawolvesRoster,
             sanAntonioMarshalsRoster,
-            tijuanaLuchadoresRoster
+            tijuanaLuchadoresRoster,
+            freeAgentsRoster
     )
 
     @RequestMapping("/baltimore_hawks")
@@ -249,6 +259,12 @@ class TpeTrackerApplication {
             tijuanaLuchadoresRoster
     )
 
+    @RequestMapping("/free_agents")
+    fun getFreeAgentsRoster() = createTeamHTML(
+            Team.FREE_AGENTS,
+            freeAgentsRoster
+    )
+
     private fun createPlayersHTML(vararg playerLists: List<Player>) =
             PLAYERS_HTML.format(
                     "All Players",
@@ -305,7 +321,8 @@ enum class Team(
     PORTLAND_PYTHONS("164", "/portland_pythons", "Portland Pythons", true),
     NORFOLK_SEAWOLVES("162", "/norfolk_seawolves", "Norfolk SeaWolves", true),
     SAN_ANTONIO_MARSHALS("156", "/san_antonio_marshals", "San Antonio Marshals", true),
-    TIJUANA_LUCHADORES("154", "/tijuana_luchadores", "Tijuana Luchadores", true)
+    TIJUANA_LUCHADORES("154", "/tijuana_luchadores", "Tijuana Luchadores", true),
+    FREE_AGENTS("34", "/free_agents", "Free Agents", false)
 }
 
 enum class Position(
