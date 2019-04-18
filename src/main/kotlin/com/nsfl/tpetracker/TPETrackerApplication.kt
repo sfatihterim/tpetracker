@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import java.util.regex.Pattern
 
-private const val PLAYERS_HTML = "<!DOCTYPE html><html><head><title>%s</title><link rel=\"stylesheet\" type=\"text/css\" href=\"https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/semantic.min.css\"><link rel=\"stylesheet\" type=\"text/css\" href=\"https://cdn.datatables.net/1.10.19/css/dataTables.semanticui.min.css\"><script type=\"text/javascript\" language=\"javascript\" src=\"https://code.jquery.com/jquery-3.3.1.js\"></script><script type=\"text/javascript\" language=\"javascript\" src=\"https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js\"></script><script type=\"text/javascript\" language=\"javascript\" src=\"https://cdn.datatables.net/1.10.19/js/dataTables.semanticui.min.js\"></script><script type=\"text/javascript\" language=\"javascript\" src=\"https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/semantic.min.js\"></script><script type=\"text/javascript\" class=\"init\">;var dataSet=[%s];\$(document).ready(function(){\$('#example').DataTable({paging:false,order: [[4, \"desc\"]],data:dataSet,columns:[{ title: 'Draft Year' }, { title: 'Team' }, { title: 'Name' }, { title: 'Position' }, { title: 'TPE' }]})});</script><style>div{padding:8px}</style></head><body><div><table id=\"example\" class=\"ui celled table\" width=\"100%%\"></table></div></body></html>"
-private const val TEAM_HTML = "<!DOCTYPE html><html><head><title>%s</title><link rel=\"stylesheet\" type=\"text/css\" href=\"https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/semantic.min.css\"><link rel=\"stylesheet\" type=\"text/css\" href=\"https://cdn.datatables.net/1.10.19/css/dataTables.semanticui.min.css\"><script type=\"text/javascript\" language=\"javascript\" src=\"https://code.jquery.com/jquery-3.3.1.js\"></script><script type=\"text/javascript\" language=\"javascript\" src=\"https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js\"></script><script type=\"text/javascript\" language=\"javascript\" src=\"https://cdn.datatables.net/1.10.19/js/dataTables.semanticui.min.js\"></script><script type=\"text/javascript\" language=\"javascript\" src=\"https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/semantic.min.js\"></script><script type=\"text/javascript\" class=\"init\">;var dataSet=[%s];\$(document).ready(function(){\$('#example').DataTable({paging:false,order: [[3, \"desc\"]],data:dataSet,columns:[{ title: 'Draft Year' }, { title: 'Name' }, { title: 'Position' }, { title: 'TPE' }]})});</script><style>div{padding:8px}</style></head><body><div><h2>%s</h2><table id=\"example\" class=\"ui celled table\" width=\"100%%\"></table></div></body></html>"
+private const val PLAYERS_HTML = "<!DOCTYPE html><html><head><title>%s</title><link rel=\"stylesheet\" type=\"text/css\" href=\"https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/semantic.min.css\"><link rel=\"stylesheet\" type=\"text/css\" href=\"https://cdn.datatables.net/1.10.19/css/dataTables.semanticui.min.css\"><script type=\"text/javascript\" language=\"javascript\" src=\"https://code.jquery.com/jquery-3.3.1.js\"></script><script type=\"text/javascript\" language=\"javascript\" src=\"https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js\"></script><script type=\"text/javascript\" language=\"javascript\" src=\"https://cdn.datatables.net/1.10.19/js/dataTables.semanticui.min.js\"></script><script type=\"text/javascript\" language=\"javascript\" src=\"https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/semantic.min.js\"></script><script type=\"text/javascript\" class=\"init\">;var dataSet=[%s];\$(document).ready(function(){\$('#example').DataTable({paging:false,order: [[4, \"desc\"]],data:dataSet,columns:[{ title: 'Draft Year' }, { title: 'Team' }, { title: 'Name' }, { title: 'Position' }, { title: 'TPE' }]})});</script><style>div{padding-left: 5%%; padding-right: 5%%; padding-top: 0.5%%; padding-bottom: 0.5%%;}</style></head><body><div><table id=\"example\" class=\"ui celled table\" width=\"100%%\"></table></div></body></html>"
+private const val TEAM_HTML = "<!DOCTYPE html><html><head><title>%s</title><link rel=\"stylesheet\" type=\"text/css\" href=\"https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/semantic.min.css\"><link rel=\"stylesheet\" type=\"text/css\" href=\"https://cdn.datatables.net/1.10.19/css/dataTables.semanticui.min.css\"><script type=\"text/javascript\" language=\"javascript\" src=\"https://code.jquery.com/jquery-3.3.1.js\"></script><script type=\"text/javascript\" language=\"javascript\" src=\"https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js\"></script><script type=\"text/javascript\" language=\"javascript\" src=\"https://cdn.datatables.net/1.10.19/js/dataTables.semanticui.min.js\"></script><script type=\"text/javascript\" language=\"javascript\" src=\"https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/semantic.min.js\"></script><script type=\"text/javascript\" class=\"init\">;var dataSet=[%s];\$(document).ready(function(){\$('#example').DataTable({paging:false,order: [[3, \"desc\"]],data:dataSet,columns:[{ title: 'Draft Year' }, { title: 'Name' }, { title: 'Position' }, { title: 'TPE' }]})});</script><style>div{padding-left: 5%%; padding-right: 5%%; padding-top: 0.5%%; padding-bottom: 0.5%%;}caption{padding-bottom: 30px; font-size: 30px}</style></head><body><div><table id=\"example\" class=\"ui celled table\" width=\"100%%\"><caption>%s</caption></table></div></body></html>"
 
 @RestController
 @SpringBootApplication
@@ -63,27 +63,29 @@ class TpeTrackerApplication {
                     .filter { element ->
                         element.toString().let {
                             it.startsWith("<td class=\"row4\"")
-                                    && it.contains("TPE:")
+                                    && it.contains(">(S")
                         }
                     }.forEach { element ->
                         element.toString().let {
-                            val playerInfo = parsePlayerInfo(it).split("-")
-                            playerList.add(
-                                    Player(
-                                            playerInfo[1].trim(),
-                                            team,
-                                            Position.fromAbbreviation(playerInfo[2].trim()),
-                                            playerInfo[0].trim().let { info ->
-                                                if (info.length == 2) {
-                                                    "S0${info.substring(1)}"
-                                                } else {
-                                                    info
-                                                }
-                                            },
-                                            parseTPE(it),
-                                            parseUrl(it)
-                                    )
-                            )
+                            val playerInfo = parsePlayerInfo(it).split("?")
+                            if (playerInfo.size == 3) {
+                                playerList.add(
+                                        Player(
+                                                playerInfo[1].trim(),
+                                                team,
+                                                Position.fromAbbreviation(playerInfo[2].trim()),
+                                                playerInfo[0].trim().let { info ->
+                                                    if (info.length == 2) {
+                                                        "S0${info.substring(1)}"
+                                                    } else {
+                                                        info
+                                                    }
+                                                },
+                                                parseTPE(it),
+                                                parseUrl(it)
+                                        )
+                                )
+                            }
                         }
                     }
         }
@@ -101,16 +103,23 @@ class TpeTrackerApplication {
                 .replace("(", "")
                 .replace(")", "")
                 .replace("'", "’")
+                .replaceFirst("-", "?")
+                .reversed()
+                .replaceFirst("-", "?")
+                .reversed()
     }
 
     private fun parseTPE(elementString: String): Int {
+        return try {
+            val startIndex = elementString.indexOf("TPE:")
+            val endIndex = elementString.indexOf("<", startIndex)
 
-        val startIndex = elementString.indexOf("TPE:")
-        val endIndex = elementString.indexOf("<", startIndex)
-
-        return elementString.substring(startIndex, endIndex)
-                .replace(Pattern.compile("[^0-9.]").toRegex(), "")
-                .toInt()
+            elementString.substring(startIndex, endIndex)
+                    .replace(Pattern.compile("[^0-9.]").toRegex(), "")
+                    .toInt()
+        } catch (exception: Exception) {
+            50
+        }
     }
 
     private fun parseUrl(elementString: String): String {
