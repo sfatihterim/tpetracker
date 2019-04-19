@@ -11,8 +11,9 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import java.util.regex.Pattern
 
-private const val PLAYERS_HTML = "<!DOCTYPE html><html><head><title>%s</title><link rel=\"stylesheet\" type=\"text/css\" href=\"https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/semantic.min.css\"><link rel=\"stylesheet\" type=\"text/css\" href=\"https://cdn.datatables.net/1.10.19/css/dataTables.semanticui.min.css\"><script type=\"text/javascript\" language=\"javascript\" src=\"https://code.jquery.com/jquery-3.3.1.js\"></script><script type=\"text/javascript\" language=\"javascript\" src=\"https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js\"></script><script type=\"text/javascript\" language=\"javascript\" src=\"https://cdn.datatables.net/1.10.19/js/dataTables.semanticui.min.js\"></script><script type=\"text/javascript\" language=\"javascript\" src=\"https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/semantic.min.js\"></script><script type=\"text/javascript\" class=\"init\">;var dataSet=[%s];\$(document).ready(function(){\$('#table').DataTable({paging:false,order: [[4, \"desc\"]],data:dataSet,columns:[{ title: 'Draft Year' }, { title: 'Team' }, { title: 'Name' }, { title: 'Position' }, { title: 'TPE' }]})});</script><style>div{padding-left: 5%%; padding-right: 5%%; padding-top: 0.5%%; padding-bottom: 0.5%%;}</style></head><body><div><table id=\"table\" class=\"ui celled table\" width=\"100%%\"></table></div></body></html>"
-private const val TEAM_HTML = "<!DOCTYPE html><html><head><title>%s</title><link rel=\"stylesheet\" type=\"text/css\" href=\"https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/semantic.min.css\"><link rel=\"stylesheet\" type=\"text/css\" href=\"https://cdn.datatables.net/1.10.19/css/dataTables.semanticui.min.css\"><script type=\"text/javascript\" language=\"javascript\" src=\"https://code.jquery.com/jquery-3.3.1.js\"></script><script type=\"text/javascript\" language=\"javascript\" src=\"https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js\"></script><script type=\"text/javascript\" language=\"javascript\" src=\"https://cdn.datatables.net/1.10.19/js/dataTables.semanticui.min.js\"></script><script type=\"text/javascript\" language=\"javascript\" src=\"https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/semantic.min.js\"></script><script type=\"text/javascript\" class=\"init\">;var dataSet=[%s];\$(document).ready(function(){\$('#table').DataTable({paging:false,order: [[3, \"desc\"]],data:dataSet,columns:[{ title: 'Draft Year' }, { title: 'Name' }, { title: 'Position' }, { title: 'TPE' }]})});</script><style>div{padding-left: 5%%; padding-right: 5%%; padding-top: 0.5%%; padding-bottom: 0.5%%;}caption{padding-bottom: 30px; font-size: 30px}</style></head><body><div><table id=\"table\" class=\"ui celled table\" width=\"100%%\"><caption>%s</caption></table></div></body></html>"
+private const val INDEX_HTML = "<!DOCTYPE html><html><head><title>TPE Tracker</title><link rel=\"stylesheet\" type=\"text/css\" href=\"https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css\"><script type=\"text/javascript\" language=\"javascript\" src=\"https://code.jquery.com/jquery-3.3.1.slim.min.js\"></script><script type=\"text/javascript\" language=\"javascript\" src=\"https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.bundle.min.js\"></script></head><body><br><br><div class=\"container\"><div class=\"row\"><div class=\"col-xl-6 col-md-6 mb-4\" style=\"cursor:pointer\" onclick=\"window.location='/all_players';\"><div class=\"card border-0 shadow\"><img src=\"\" class=\"card-img-top\"><div class=\"card-body text-center\"><br><h5 class=\"card-title mb-0\">All Players</h5><br></div></div></div><div class=\"col-xl-6 col-md-6 mb-4\" style=\"cursor:pointer\" onclick=\"window.location='https://www.urbandictionary.com/define.php?term=soon%E2%84%A2';\"><div class=\"card border-0 shadow\"><img src=\"\" class=\"card-img-top\"><div class=\"card-body text-center\"><br><h5 class=\"card-title mb-0\">Team Stats</h5><br></div></div></div></div></div><br><div class=\"container\"><div class=\"row\"><div class=\"col-xl-4 col-md-6 mb-4\" style=\"cursor:pointer\" onclick=\"window.location='/baltimore_hawks';\"><div class=\"card border-0 shadow\"><img src=\"https://i.imgur.com/V7b1IrD.png\" class=\"card-img-top\"><div class=\"card-body text-center\"><h5 class=\"card-title mb-0\">Baltimore Hawks</h5></div></div></div><div class=\"col-xl-4 col-md-6 mb-4\" style=\"cursor:pointer\" onclick=\"window.location='/colorado_yeti';\"><div class=\"card border-0 shadow\"><img src=\"https://i.imgur.com/F82SkOe.png\" class=\"card-img-top\"><div class=\"card-body text-center\"><h5 class=\"card-title mb-0\">Colorado Yeti</h5></div></div></div><div class=\"col-xl-4 col-md-6 mb-4\" style=\"cursor:pointer\" onclick=\"window.location='/philadelphia_liberty';\"><div class=\"card border-0 shadow\"><img src=\"https://i.imgur.com/e26kJIj.png\" class=\"card-img-top\"><div class=\"card-body text-center\"><h5 class=\"card-title mb-0\">Philadelphia Liberty</h5></div></div></div><div class=\"col-xl-4 col-md-6 mb-4\" style=\"cursor:pointer\" onclick=\"window.location='/yellowknife_wraiths';\"><div class=\"card border-0 shadow\"><img src=\"https://i.imgur.com/HTNIYcS.png\" class=\"card-img-top\"><div class=\"card-body text-center\"><h5 class=\"card-title mb-0\">Yellowknife Wraiths</h5></div></div></div><div class=\"col-xl-4 col-md-6 mb-4\" style=\"cursor:pointer\" onclick=\"window.location='/arizona_outlaws';\"><div class=\"card border-0 shadow\"><img src=\"https://i.imgur.com/Run36h3.png\" class=\"card-img-top\"><div class=\"card-body text-center\"><h5 class=\"card-title mb-0\">Arizona Outlaws</h5></div></div></div><div class=\"col-xl-4 col-md-6 mb-4\" style=\"cursor:pointer\" onclick=\"window.location='/new_orleans_second_line';\"><div class=\"card border-0 shadow\"><img src=\"https://i.imgur.com/39Pv6j6.png\" class=\"card-img-top\"><div class=\"card-body text-center\"><h5 class=\"card-title mb-0\">New Orleans Second Line</h5></div></div></div><div class=\"col-xl-4 col-md-6 mb-4\" style=\"cursor:pointer\" onclick=\"window.location='/orange_county_otters';\"><div class=\"card border-0 shadow\"><img src=\"https://i.imgur.com/A1jDLTx.png\" class=\"card-img-top\"><div class=\"card-body text-center\"><h5 class=\"card-title mb-0\">Orange County Otters</h5></div></div></div><div class=\"col-xl-4 col-md-6 mb-4\" style=\"cursor:pointer\" onclick=\"window.location='/san_jose_sabercats';\"><div class=\"card border-0 shadow\"><img src=\"https://i.imgur.com/WKAzCvY.png\" class=\"card-img-top\"><div class=\"card-body text-center\"><h5 class=\"card-title mb-0\">San Jose SaberCats</h5></div></div></div><div class=\"col-xl-4 col-md-6 mb-4\" style=\"cursor:pointer\" onclick=\"window.location='https://www.youtube.com/watch?v=dQw4w9WgXcQ';\"><div class=\"card border-0 shadow\"><img src=\"https://i.imgur.com/A0LezPb.png\" class=\"card-img-top\"><div class=\"card-body text-center\"><h5 class=\"card-title mb-0\">Washington Admirals</h5></div></div></div><div class=\"col-xl-4 col-md-6 mb-4\" style=\"cursor:pointer\" onclick=\"window.location='https://www.youtube.com/watch?v=dQw4w9WgXcQ';\"><div class=\"card border-0 shadow\"><img src=\"https://i.imgur.com/A0LezPb.png\" class=\"card-img-top\"><div class=\"card-body text-center\"><h5 class=\"card-title mb-0\">Honolulu Islanders</h5></div></div></div></div></div><br><div class=\"container\"><div class=\"row\"><div class=\"col-xl-4 col-md-6 mb-4\" style=\"cursor:pointer\" onclick=\"window.location='/palm_beach_solar_bears';\"><div class=\"card border-0 shadow\"><img src=\"https://i.imgur.com/FW3Ewsh.png\" class=\"card-img-top\"><div class=\"card-body text-center\"><h5 class=\"card-title mb-0\">Palm Beach Solar Bears</h5></div></div></div><div class=\"col-xl-4 col-md-6 mb-4\" style=\"cursor:pointer\" onclick=\"window.location='/kansas_city_coyotes';\"><div class=\"card border-0 shadow\"><img src=\"https://i.imgur.com/8ZFoMpk.png\" class=\"card-img-top\"><div class=\"card-body text-center\"><h5 class=\"card-title mb-0\">Kansas City Coyotes</h5></div></div></div><div class=\"col-xl-4 col-md-6 mb-4\" style=\"cursor:pointer\" onclick=\"window.location='/portland_pythons';\"><div class=\"card border-0 shadow\"><img src=\"https://i.imgur.com/g1jBrkG.png\" class=\"card-img-top\"><div class=\"card-body text-center\"><h5 class=\"card-title mb-0\">Portland Pythons</h5></div></div></div><div class=\"col-xl-4 col-md-6 mb-4\" style=\"cursor:pointer\" onclick=\"window.location='/norfolk_seawolves';\"><div class=\"card border-0 shadow\"><img src=\"https://i.imgur.com/rUbmsUh.png\" class=\"card-img-top\"><div class=\"card-body text-center\"><h5 class=\"card-title mb-0\">Norfolk SeaWolves</h5></div></div></div><div class=\"col-xl-4 col-md-6 mb-4\" style=\"cursor:pointer\" onclick=\"window.location='/san_antonio_marshals';\"><div class=\"card border-0 shadow\"><img src=\"https://i.imgur.com/FL05wyS.png\" class=\"card-img-top\"><div class=\"card-body text-center\"><h5 class=\"card-title mb-0\">San Antonio Marshals</h5></div></div></div><div class=\"col-xl-4 col-md-6 mb-4\" style=\"cursor:pointer\" onclick=\"window.location='/tijuana_luchadores';\"><div class=\"card border-0 shadow\"><img src=\"https://i.imgur.com/Rqa9DsX.png\" class=\"card-img-top\"><div class=\"card-body text-center\"><h5 class=\"card-title mb-0\">Tijuana Luchadores</h5></div></div></div></div></div><br><div class=\"container\"><div class=\"row\"><div class=\"col-xl-4 col-md-6 mb-4\" style=\"cursor:pointer\" onclick=\"window.location='/free_agents';\"><div class=\"card border-0 shadow\"><div class=\"card-body text-center\"><h5 class=\"card-title mb-0\">Free Agents</h5></div></div></div><div class=\"col-xl-4 col-md-6 mb-4\" style=\"cursor:pointer\" onclick=\"window.location='/qb_prospects';\"><div class=\"card border-0 shadow\"><div class=\"card-body text-center\"><h5 class=\"card-title mb-0\">QB Prospects</h5></div></div></div><div class=\"col-xl-4 col-md-6 mb-4\" style=\"cursor:pointer\" onclick=\"window.location='/rb_prospects';\"><div class=\"card border-0 shadow\"><div class=\"card-body text-center\"><h5 class=\"card-title mb-0\">RB Prospects</h5></div></div></div><div class=\"col-xl-4 col-md-6 mb-4\" style=\"cursor:pointer\" onclick=\"window.location='/wr_prospects';\"><div class=\"card border-0 shadow\"><div class=\"card-body text-center\"><h5 class=\"card-title mb-0\">WR Prospects</h5></div></div></div><div class=\"col-xl-4 col-md-6 mb-4\" style=\"cursor:pointer\" onclick=\"window.location='/te_prospects';\"><div class=\"card border-0 shadow\"><div class=\"card-body text-center\"><h5 class=\"card-title mb-0\">TE Prospects</h5></div></div></div><div class=\"col-xl-4 col-md-6 mb-4\" style=\"cursor:pointer\" onclick=\"window.location='/ol_prospects';\"><div class=\"card border-0 shadow\"><div class=\"card-body text-center\"><h5 class=\"card-title mb-0\">OL Prospects</h5></div></div></div><div class=\"col-xl-4 col-md-6 mb-4\" style=\"cursor:pointer\" onclick=\"window.location='/de_prospects';\"><div class=\"card border-0 shadow\"><div class=\"card-body text-center\"><h5 class=\"card-title mb-0\">DE Prospects</h5></div></div></div><div class=\"col-xl-4 col-md-6 mb-4\" style=\"cursor:pointer\" onclick=\"window.location='/dt_prospects';\"><div class=\"card border-0 shadow\"><div class=\"card-body text-center\"><h5 class=\"card-title mb-0\">DT Prospects</h5></div></div></div><div class=\"col-xl-4 col-md-6 mb-4\" style=\"cursor:pointer\" onclick=\"window.location='/lb_prospects';\"><div class=\"card border-0 shadow\"><div class=\"card-body text-center\"><h5 class=\"card-title mb-0\">LB Prospects</h5></div></div></div><div class=\"col-xl-4 col-md-6 mb-4\" style=\"cursor:pointer\" onclick=\"window.location='/cb_prospects';\"><div class=\"card border-0 shadow\"><div class=\"card-body text-center\"><h5 class=\"card-title mb-0\">CB Prospects</h5></div></div></div><div class=\"col-xl-4 col-md-6 mb-4\" style=\"cursor:pointer\" onclick=\"window.location='/s_prospects';\"><div class=\"card border-0 shadow\"><div class=\"card-body text-center\"><h5 class=\"card-title mb-0\">S Prospects</h5></div></div></div><div class=\"col-xl-4 col-md-6 mb-4\" style=\"cursor:pointer\" onclick=\"window.location='/kp_prospects';\"><div class=\"card border-0 shadow\"><div class=\"card-body text-center\"><h5 class=\"card-title mb-0\">K/P Prospects</h5></div></div></div></div></div><br><br></body></html>"
+private const val PLAYERS_HTML = "<!DOCTYPE html><html><head><title>%s</title><link rel=\"stylesheet\" type=\"text/css\" href=\"https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/semantic.min.css\"><link rel=\"stylesheet\" type=\"text/css\" href=\"https://cdn.datatables.net/1.10.19/css/dataTables.semanticui.min.css\"><script type=\"text/javascript\" language=\"javascript\" src=\"https://code.jquery.com/jquery-3.3.1.js\"></script><script type=\"text/javascript\" language=\"javascript\" src=\"https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js\"></script><script type=\"text/javascript\" language=\"javascript\" src=\"https://cdn.datatables.net/1.10.19/js/dataTables.semanticui.min.js\"></script><script type=\"text/javascript\" language=\"javascript\" src=\"https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/semantic.min.js\"></script><script type=\"text/javascript\" class=\"init\">var dataSet=[%s];\$(document).ready(function(){\$('#table').DataTable({paging:false,order: [[4, \"desc\"]],data:dataSet,columns:[{ title: 'Draft Year' }, { title: 'Team' }, { title: 'Name' }, { title: 'Position' }, { title: 'TPE' }]})});</script><style>div{padding-left: 5%%; padding-right: 5%%; padding-top: 0.5%%; padding-bottom: 0.5%%;}</style></head><body><div><table id=\"table\" class=\"ui celled table\" width=\"100%%\"></table></div></body></html>"
+private const val TEAM_HTML = "<!DOCTYPE html><html><head><title>%s</title><link rel=\"stylesheet\" type=\"text/css\" href=\"https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/semantic.min.css\"><link rel=\"stylesheet\" type=\"text/css\" href=\"https://cdn.datatables.net/1.10.19/css/dataTables.semanticui.min.css\"><script type=\"text/javascript\" language=\"javascript\" src=\"https://code.jquery.com/jquery-3.3.1.js\"></script><script type=\"text/javascript\" language=\"javascript\" src=\"https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js\"></script><script type=\"text/javascript\" language=\"javascript\" src=\"https://cdn.datatables.net/1.10.19/js/dataTables.semanticui.min.js\"></script><script type=\"text/javascript\" language=\"javascript\" src=\"https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/semantic.min.js\"></script><script type=\"text/javascript\" class=\"init\">var dataSet=[%s];\$(document).ready(function(){\$('#table').DataTable({paging:false,order: [[3, \"desc\"]],data:dataSet,columns:[{ title: 'Draft Year' }, { title: 'Name' }, { title: 'Position' }, { title: 'TPE' }]})});</script><style>div{padding-left: 5%%; padding-right: 5%%; padding-top: 0.5%%; padding-bottom: 0.5%%;}caption{padding-bottom: 30px; font-size: 30px}</style></head><body><div><table id=\"table\" class=\"ui celled table\" width=\"100%%\"><caption>%s</caption></table></div></body></html>"
 
 @RestController
 @SpringBootApplication
@@ -167,36 +168,8 @@ class TPETrackerApplication {
     }
 
     @RequestMapping
-    fun getIndex() =
-            "<title>TPE Tracker Index</title>" +
-                    "<a href=\"/all_players\">All Players</a><br><br>" +
-                    "<a href=\"/baltimore_hawks\">Baltimore Hawks</a><br><br>" +
-                    "<a href=\"/colorado_yeti\">Colorado Yeti</a><br><br>" +
-                    "<a href=\"/philadelphia_liberty\">Philadelphia Liberty</a><br><br>" +
-                    "<a href=\"/yellowknife_wraiths\">Yellowknife Wraiths</a><br><br>" +
-                    "<a href=\"/arizona_outlaws\">Arizona Outlaws</a><br><br>" +
-                    "<a href=\"/new_orleans_second_line\">New Orleans Second Line</a><br><br>" +
-                    "<a href=\"/orange_county_otters\">Orange County Otters</a><br><br>" +
-                    "<a href=\"/san_jose_sabercats\">San Jose SaberCats</a><br><br>" +
-                    "<a href=\"/palm_beach_solar_bears\">Palm Beach Solar Bears</a><br><br>" +
-                    "<a href=\"/kansas_city_coyotes\">Kansas City Coyotes</a><br><br>" +
-                    "<a href=\"/portland_pythons\">Portland Pythons</a><br><br>" +
-                    "<a href=\"/norfolk_seawolves\">Norfolk SeaWolves</a><br><br>" +
-                    "<a href=\"/san_antonio_marshals\">San Antonio Marshals</a><br><br>" +
-                    "<a href=\"/tijuana_luchadores\">Tijuana Luchadores</a><br><br>" +
-                    "<a href=\"/free_agents\">Free Agents</a><br><br>" +
-                    "<a href=\"/qb_prospects\">QB Prospects</a><br><br>" +
-                    "<a href=\"/rb_prospects\">RB Prospects</a><br><br>" +
-                    "<a href=\"/wr_prospects\">WR Prospects</a><br><br>" +
-                    "<a href=\"/te_prospects\">TE Prospects</a><br><br>" +
-                    "<a href=\"/ol_prospects\">OL Prospects</a><br><br>" +
-                    "<a href=\"/de_prospects\">DE Prospects</a><br><br>" +
-                    "<a href=\"/dt_prospects\">DT Prospects</a><br><br>" +
-                    "<a href=\"/lb_prospects\">LB Prospects</a><br><br>" +
-                    "<a href=\"/cb_prospects\">CB Prospects</a><br><br>" +
-                    "<a href=\"/s_prospects\">S Prospects</a><br><br>" +
-                    "<a href=\"/kp_prospects\">K/P Prospects</a><br><br>"
-
+    fun getIndex() = INDEX_HTML
+    
     @RequestMapping("/all_players")
     fun getAllPlayers() = createPlayersHTML(
             baltimoreHawksRoster,
@@ -316,21 +289,14 @@ class TPETrackerApplication {
                     }
             )
 
-    private fun createTeamHTML(team: Team, playerList: List<Player>): String {
-
-        var teamInfo = "${team.full} - Total TPE: ${playerList.sumBy { it.tpe }}"
-        if (team.dsfl) {
-            teamInfo += " - Effective TPE: ${playerList.sumBy { if (it.tpe > 250) 250 else it.tpe }}"
-        }
-
-        return TEAM_HTML.format(
-                team.full,
-                playerList.joinToString(",") {
-                    "['${it.draftYear}','<a href=\"${it.url}\">${it.name}</a>','${it.position.full}','${it.tpe}']"
-                },
-                teamInfo
-        )
-    }
+    private fun createTeamHTML(team: Team, playerList: List<Player>) =
+            TEAM_HTML.format(
+                    team.full,
+                    playerList.joinToString(",") {
+                        "['${it.draftYear}','<a href=\"${it.url}\">${it.name}</a>','${it.position.full}','${it.tpe}']"
+                    },
+                    team.full
+            )
 }
 
 class Player(
@@ -345,35 +311,34 @@ class Player(
 enum class Team(
         val id: String,
         val url: String,
-        val full: String,
-        val dsfl: Boolean
+        val full: String
 ) {
-    BALTIMORE_HAWKS("69", "/baltimore_hawks", "Baltimore Hawks", false),
-    COLORADO_YETI("55", "/colorado_yeti", "Colorado Yeti", false),
-    PHILADELPHIA_LIBERTY("110", "/philadelphia_liberty", "Philadelphia Liberty", false),
-    YELLOWKNIFE_WRAITHS("57", "/yellowknife_wraiths", "Yellowknife Wraiths", false),
-    ARIZONA_OUTLAWS("72", "/arizona_outlaws", "Arizona Outlaws", false),
-    NEW_ORLEANS_SECOND_LINE("113", "/new_orleans_second_line", "New Orleans Second Line", false),
-    ORANGE_COUNTY_OTTERS("53", "/orange_county_otters", "Orange County Otters", false),
-    SAN_JOSE_SABERCATS("51", "/san_jose_sabercats", "San Jose SaberCats", false),
-    PALM_BEACH_SOLAR_BEARS("160", "/palm_beach_solar_bears", "Palm Beach Solar Bears", true),
-    KANSAS_CITY_COYOTES("158", "/kansas_city_coyotes", "Kansas City Coyotes", true),
-    PORTLAND_PYTHONS("164", "/portland_pythons", "Portland Pythons", true),
-    NORFOLK_SEAWOLVES("162", "/norfolk_seawolves", "Norfolk SeaWolves", true),
-    SAN_ANTONIO_MARSHALS("156", "/san_antonio_marshals", "San Antonio Marshals", true),
-    TIJUANA_LUCHADORES("154", "/tijuana_luchadores", "Tijuana Luchadores", true),
-    FREE_AGENTS("34", "/free_agents", "Free Agents", false),
-    QB_PROSPECTS("", "/qb_prospects", "QB Prospects", false),
-    RB_PROSPECTS("", "/rb_prospects", "RB Prospects", false),
-    WR_PROSPECTS("", "/wr_prospects", "WR Prospects", false),
-    TE_PROSPECTS("", "/te_prospects", "TE Prospects", false),
-    OL_PROSPECTS("", "/ol_prospects", "OL Prospects", false),
-    DE_PROSPECTS("", "/de_prospects", "DE Prospects", false),
-    DT_PROSPECTS("", "/dt_prospects", "DT Prospects", false),
-    LB_PROSPECTS("", "/lb_prospects", "LB Prospects", false),
-    CB_PROSPECTS("", "/cb_prospects", "CB Prospects", false),
-    S_PROSPECTS("", "/s_prospects", "S Prospects", false),
-    KP_PROSPECTS("", "/kp_prospects", "K/P Prospects", false)
+    BALTIMORE_HAWKS("69", "/baltimore_hawks", "Baltimore Hawks"),
+    COLORADO_YETI("55", "/colorado_yeti", "Colorado Yeti"),
+    PHILADELPHIA_LIBERTY("110", "/philadelphia_liberty", "Philadelphia Liberty"),
+    YELLOWKNIFE_WRAITHS("57", "/yellowknife_wraiths", "Yellowknife Wraiths"),
+    ARIZONA_OUTLAWS("72", "/arizona_outlaws", "Arizona Outlaws"),
+    NEW_ORLEANS_SECOND_LINE("113", "/new_orleans_second_line", "New Orleans Second Line"),
+    ORANGE_COUNTY_OTTERS("53", "/orange_county_otters", "Orange County Otters"),
+    SAN_JOSE_SABERCATS("51", "/san_jose_sabercats", "San Jose SaberCats"),
+    PALM_BEACH_SOLAR_BEARS("160", "/palm_beach_solar_bears", "Palm Beach Solar Bears"),
+    KANSAS_CITY_COYOTES("158", "/kansas_city_coyotes", "Kansas City Coyotes"),
+    PORTLAND_PYTHONS("164", "/portland_pythons", "Portland Pythons"),
+    NORFOLK_SEAWOLVES("162", "/norfolk_seawolves", "Norfolk SeaWolves"),
+    SAN_ANTONIO_MARSHALS("156", "/san_antonio_marshals", "San Antonio Marshals"),
+    TIJUANA_LUCHADORES("154", "/tijuana_luchadores", "Tijuana Luchadores"),
+    FREE_AGENTS("34", "/free_agents", "Free Agents"),
+    QB_PROSPECTS("", "/qb_prospects", "QB Prospects"),
+    RB_PROSPECTS("", "/rb_prospects", "RB Prospects"),
+    WR_PROSPECTS("", "/wr_prospects", "WR Prospects"),
+    TE_PROSPECTS("", "/te_prospects", "TE Prospects"),
+    OL_PROSPECTS("", "/ol_prospects", "OL Prospects"),
+    DE_PROSPECTS("", "/de_prospects", "DE Prospects"),
+    DT_PROSPECTS("", "/dt_prospects", "DT Prospects"),
+    LB_PROSPECTS("", "/lb_prospects", "LB Prospects"),
+    CB_PROSPECTS("", "/cb_prospects", "CB Prospects"),
+    S_PROSPECTS("", "/s_prospects", "S Prospects"),
+    KP_PROSPECTS("", "/kp_prospects", "K/P Prospects")
 }
 
 enum class Position(
