@@ -8,6 +8,8 @@ import org.springframework.scheduling.annotation.EnableScheduling
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
+import java.text.SimpleDateFormat
+import java.util.*
 
 @RestController
 @SpringBootApplication
@@ -15,33 +17,38 @@ import org.springframework.web.bind.annotation.RestController
 class Application {
 
     private val logger = LoggerFactory.getLogger("TPETrackerApplication ")
-
     private val playerRepository = PlayerRepository()
+    private var lastUpdateInfo = ""
     private val htmlGenerator = HTMLGenerator()
 
     init {
-        logger.info("Initial player update started.")
-        playerRepository.update()
-        logger.info("Initial player update finished.")
+        updatePlayers("Initial")
     }
 
     @Scheduled(cron = "0 0 10 * * MON-FRI")
     fun updatePlayersWeekday() {
-        logger.info("Weekday scheduled player update started.")
-        playerRepository.update()
-        logger.info("Weekday scheduled player update finished.")
+        updatePlayers("Weekday")
     }
 
     @Scheduled(cron = "0 0 1,4,7,10,13,16,19,22 * * SUN,SAT")
     fun updatePlayersWeekend() {
-        logger.info("Weekend scheduled player update started.")
-        playerRepository.update()
-        logger.info("Weekend scheduled player update finished.")
+        updatePlayers("Weekend")
+    }
 
+    private fun updatePlayers(type: String) {
+        val start = System.currentTimeMillis()
+        playerRepository.update()
+        lastUpdateInfo = "Last Update =>" +
+                " Type: $type," +
+                " Started At: ${Date(start)}," +
+                " Duration: ${System.currentTimeMillis() - start} ms"
     }
 
     @RequestMapping
     fun getIndex() = htmlGenerator.createIndex()
+
+    @RequestMapping("/last_update")
+    fun getLastUpdateInformation() = lastUpdateInfo
 
     @RequestMapping("/all_players")
     fun getAllPlayers() =
