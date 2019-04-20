@@ -5,12 +5,14 @@ import com.nsfl.tpetracker.model.team.Team
 class PlayerRepository {
 
     private val playerParser = PlayerParser()
+    private val playerDatabase = PlayerDatabase()
     private val playerList = ArrayList<Player>()
 
     fun update() {
         val newPlayerList = playerParser.parseAll()
         playerList.clear()
         playerList.addAll(newPlayerList)
+        playerDatabase.updatePlayers(newPlayerList)
     }
 
     fun getPlayer(playerId: String) = playerList.firstOrNull { it.id == playerId }

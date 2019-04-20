@@ -1,8 +1,8 @@
 package com.nsfl.tpetracker
 
 import com.nsfl.tpetracker.html.HTMLGenerator
-import com.nsfl.tpetracker.model.team.Team
 import com.nsfl.tpetracker.model.player.PlayerRepository
+import com.nsfl.tpetracker.model.team.Team
 import org.slf4j.LoggerFactory
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
@@ -37,12 +37,14 @@ class Application {
     }
 
     private fun updatePlayers(type: String) {
+        logger.info("$type player update started.")
         val start = System.currentTimeMillis()
         playerRepository.update()
         lastUpdateInfo = "Last Update =>" +
                 " Type: $type," +
                 " Started At: ${Date(start)}," +
                 " Duration: ${System.currentTimeMillis() - start} ms"
+        logger.info("$type player update finished.")
     }
 
     @RequestMapping
