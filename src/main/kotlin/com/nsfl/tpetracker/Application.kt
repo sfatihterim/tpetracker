@@ -1,6 +1,8 @@
 package com.nsfl.tpetracker
 
-import com.nsfl.tpetracker.model.Team
+import com.nsfl.tpetracker.html.HTMLGenerator
+import com.nsfl.tpetracker.model.team.Team
+import com.nsfl.tpetracker.model.player.PlayerRepository
 import org.slf4j.LoggerFactory
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
@@ -8,7 +10,6 @@ import org.springframework.scheduling.annotation.EnableScheduling
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
-import java.text.SimpleDateFormat
 import java.util.*
 
 @RestController

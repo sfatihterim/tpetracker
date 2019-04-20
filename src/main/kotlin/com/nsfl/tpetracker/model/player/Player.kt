@@ -1,4 +1,7 @@
-package com.nsfl.tpetracker.model
+package com.nsfl.tpetracker.model.player
+
+import com.nsfl.tpetracker.model.position.Position
+import com.nsfl.tpetracker.model.team.Team
 
 class Player(
         val id: String,

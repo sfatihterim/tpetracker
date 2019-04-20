@@ -1,4 +1,4 @@
-package com.nsfl.tpetracker.model
+package com.nsfl.tpetracker.model.position
 
 enum class Position(
         val abbreviation: String,

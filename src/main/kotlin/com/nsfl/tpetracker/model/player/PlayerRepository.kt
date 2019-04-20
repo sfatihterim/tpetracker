@@ -1,7 +1,6 @@
-package com.nsfl.tpetracker
+package com.nsfl.tpetracker.model.player
 
-import com.nsfl.tpetracker.model.Player
-import com.nsfl.tpetracker.model.Team
+import com.nsfl.tpetracker.model.team.Team
 
 class PlayerRepository {
 

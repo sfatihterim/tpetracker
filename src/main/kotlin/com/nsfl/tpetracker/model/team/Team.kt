@@ -1,4 +1,4 @@
-package com.nsfl.tpetracker.model
+package com.nsfl.tpetracker.model.team
 
 enum class Team(
         val id: String,
