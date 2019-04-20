@@ -19,11 +19,25 @@ class Application {
     private val playerRepository = PlayerRepository()
     private val htmlGenerator = HTMLGenerator()
 
-    @Scheduled(fixedRate = 6 * 60 * 60000)
-    fun refreshData() {
-        logger.info("Scheduled data refresh started.")
+    init {
+        logger.info("Initial player update started.")
         playerRepository.update()
-        logger.info("Scheduled data refresh finished.")
+        logger.info("Initial player update finished.")
+    }
+
+    @Scheduled(cron = "0 0 10 * * MON-FRI")
+    fun updatePlayersWeekday() {
+        logger.info("Weekday scheduled player update started.")
+        playerRepository.update()
+        logger.info("Weekday scheduled player update finished.")
+    }
+
+    @Scheduled(cron = "0 0 1,4,7,10,13,16,19,22 * * SUN,SAT")
+    fun updatePlayersWeekend() {
+        logger.info("Weekend scheduled player update started.")
+        playerRepository.update()
+        logger.info("Weekend scheduled player update finished.")
+
     }
 
     @RequestMapping
