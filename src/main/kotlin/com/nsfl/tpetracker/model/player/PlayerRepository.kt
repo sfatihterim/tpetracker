@@ -15,7 +15,9 @@ class PlayerRepository {
         playerDatabase.updatePlayers(newPlayerList)
     }
 
-    fun getPlayer(playerId: String) = playerList.firstOrNull { it.id == playerId }
+    fun getPlayer(playerId: String) = playerList.first { it.id == playerId }
+
+    fun getPlayerTPEHistory(playerId: String) = playerDatabase.getPlayerTPEHistory(playerId)
 
     fun getAllPlayers() = playerList
 

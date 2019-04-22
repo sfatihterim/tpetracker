@@ -2,7 +2,11 @@ package com.nsfl.tpetracker.model.player
 
 import java.sql.DriverManager
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Calendar
+import kotlin.collections.ArrayList
+import kotlin.collections.List
+import kotlin.collections.arrayListOf
+import kotlin.collections.joinToString
 
 class PlayerDatabase {
 
@@ -26,6 +30,24 @@ class PlayerDatabase {
             it.createStatement().execute("INSERT INTO players VALUES %s;".format(values))
             it.close()
         }
+    }
+
+    fun getPlayerTPEHistory(playerId: String): List<Pair<String, Int>> {
+
+        val tpeHistoryList = ArrayList<Pair<String, Int>>()
+        tpeHistoryList.add(Pair("", 50))
+
+        getConnection().let {
+            val ruleSet = it.createStatement().executeQuery("SELECT * FROM players WHERE player_id='$playerId'")
+            it.close()
+            while (ruleSet.next()) {
+                tpeHistoryList.add(
+                        Pair(ruleSet.getString("date").substring(0, 5), ruleSet.getInt("tpe"))
+                )
+            }
+        }
+
+        return tpeHistoryList
     }
 
     private fun getConnection() = DriverManager.getConnection(System.getenv("JDBC_DATABASE_URL"))

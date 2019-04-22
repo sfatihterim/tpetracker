@@ -9,6 +9,7 @@ import org.springframework.boot.runApplication
 import org.springframework.scheduling.annotation.EnableScheduling
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import java.util.*
 
@@ -47,15 +48,22 @@ class Application {
         logger.info("$type player update finished.")
     }
 
-    @RequestMapping
-    fun getIndex() = htmlGenerator.createIndex()
-
     @RequestMapping("/last_update")
     fun getLastUpdateInformation() = lastUpdateInfo
+
+    @RequestMapping
+    fun getIndex() = htmlGenerator.createIndex()
 
     @RequestMapping("/all_players")
     fun getAllPlayers() =
             htmlGenerator.createAllPlayers(playerRepository.getAllPlayers())
+
+    @RequestMapping("/player")
+    fun getAllPlayers(@RequestParam playerId: String) =
+            htmlGenerator.createPlayer(
+                    playerRepository.getPlayer(playerId),
+                    playerRepository.getPlayerTPEHistory(playerId)
+            )
 
     @RequestMapping("/team_stats")
     fun getTeamStats() = htmlGenerator.createTeamStats(
