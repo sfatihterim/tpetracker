@@ -1,17 +1,22 @@
 package com.nsfl.tpetracker
 
 import com.nsfl.tpetracker.html.HTMLGenerator
+import com.nsfl.tpetracker.model.pasta.CopyPastaRepository
 import com.nsfl.tpetracker.model.player.PlayerRepository
 import com.nsfl.tpetracker.model.team.Team
 import org.slf4j.LoggerFactory
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
+import org.springframework.boot.web.servlet.error.ErrorController
 import org.springframework.scheduling.annotation.EnableScheduling
 import org.springframework.scheduling.annotation.Scheduled
+import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import java.util.*
+import javax.servlet.RequestDispatcher
+import javax.servlet.http.HttpServletRequest
 
 @RestController
 @SpringBootApplication
@@ -19,8 +24,10 @@ import java.util.*
 class Application {
 
     private val logger = LoggerFactory.getLogger("TPETrackerApplication ")
-    private val playerRepository = PlayerRepository()
     private var lastUpdateInfo = ""
+
+    private val playerRepository = PlayerRepository()
+    private val copyPastaRepository = CopyPastaRepository()
     private val htmlGenerator = HTMLGenerator()
 
     init {
@@ -51,22 +58,28 @@ class Application {
     @RequestMapping("/last_update")
     fun getLastUpdateInformation() = lastUpdateInfo
 
-    @RequestMapping
-    fun getIndex() = htmlGenerator.createIndex()
+    @RequestMapping("/error")
+    fun getError(request: HttpServletRequest) = htmlGenerator.createErrorPage(
+            request.getAttribute(RequestDispatcher.ERROR_STATUS_CODE).toString(),
+            copyPastaRepository.getRandomCopyPasta()
+    )
+
+    @RequestMapping("/")
+    fun getIndex() = htmlGenerator.createIndexPage()
 
     @RequestMapping("/all_players")
     fun getAllPlayers() =
-            htmlGenerator.createAllPlayers(playerRepository.getAllPlayers())
+            htmlGenerator.createAllPlayersPage(playerRepository.getAllPlayers())
 
     @RequestMapping("/player")
     fun getAllPlayers(@RequestParam playerId: String) =
-            htmlGenerator.createPlayer(
+            htmlGenerator.createPlayerPage(
                     playerRepository.getPlayer(playerId),
                     playerRepository.getPlayerTPEHistory(playerId)
             )
 
     @RequestMapping("/team_stats")
-    fun getTeamStats() = htmlGenerator.createTeamStats(
+    fun getTeamStats() = htmlGenerator.createTeamStatsPage(
             listOf(
                     Pair(Team.BALTIMORE_HAWKS, playerRepository.getBaltimoreHawksPlayers()),
                     Pair(Team.COLORADO_YETI, playerRepository.getColoradoYetiPlayers()),
@@ -88,160 +101,165 @@ class Application {
     )
 
     @RequestMapping("/baltimore_hawks")
-    fun getBaltimoreHawksPlayers() = htmlGenerator.createTeam(
+    fun getBaltimoreHawksPlayers() = htmlGenerator.createTeamPage(
             Team.BALTIMORE_HAWKS,
             playerRepository.getBaltimoreHawksPlayers()
     )
 
     @RequestMapping("/colorado_yeti")
-    fun getColoradoYetiPlayers() = htmlGenerator.createTeam(
+    fun getColoradoYetiPlayers() = htmlGenerator.createTeamPage(
             Team.COLORADO_YETI,
             playerRepository.getColoradoYetiPlayers()
     )
 
     @RequestMapping("/philadelphia_liberty")
-    fun getPhiladelphiaLibertyPlayers() = htmlGenerator.createTeam(
+    fun getPhiladelphiaLibertyPlayers() = htmlGenerator.createTeamPage(
             Team.PHILADELPHIA_LIBERTY,
             playerRepository.getPhiladelphiaLibertyPlayers()
     )
 
     @RequestMapping("/yellowknife_wraiths")
-    fun getYellowknifeWraithsPlayers() = htmlGenerator.createTeam(
+    fun getYellowknifeWraithsPlayers() = htmlGenerator.createTeamPage(
             Team.YELLOWKNIFE_WRAITHS,
             playerRepository.getYellowknifeWraithsPlayers()
     )
 
     @RequestMapping("/arizona_outlaws")
-    fun getArizonaOutlawsPlayers() = htmlGenerator.createTeam(
+    fun getArizonaOutlawsPlayers() = htmlGenerator.createTeamPage(
             Team.ARIZONA_OUTLAWS,
             playerRepository.getArizonaOutlawsPlayers()
     )
 
     @RequestMapping("/new_orleans_second_line")
-    fun getNewOrleansSecondLinePlayers() = htmlGenerator.createTeam(
+    fun getNewOrleansSecondLinePlayers() = htmlGenerator.createTeamPage(
             Team.NEW_ORLEANS_SECOND_LINE,
             playerRepository.getNewOrleansSecondLinePlayers()
     )
 
     @RequestMapping("/orange_county_otters")
-    fun getOrangeCountyOttersPlayers() = htmlGenerator.createTeam(
+    fun getOrangeCountyOttersPlayers() = htmlGenerator.createTeamPage(
             Team.ORANGE_COUNTY_OTTERS,
             playerRepository.getOrangeCountyOttersPlayers()
     )
 
     @RequestMapping("/san_jose_sabercats")
-    fun getSanJoseSaberCatsPlayers() = htmlGenerator.createTeam(
+    fun getSanJoseSaberCatsPlayers() = htmlGenerator.createTeamPage(
             Team.SAN_JOSE_SABERCATS,
             playerRepository.getSanJoseSabercatsPlayers()
     )
 
     @RequestMapping("/palm_beach_solar_bears")
-    fun getPalmBeachSolarBearsPlayers() = htmlGenerator.createTeam(
+    fun getPalmBeachSolarBearsPlayers() = htmlGenerator.createTeamPage(
             Team.PALM_BEACH_SOLAR_BEARS,
             playerRepository.getPalmBeachSolarBearsPlayers()
     )
 
     @RequestMapping("/kansas_city_coyotes")
-    fun getKansasCityCoyotesPlayers() = htmlGenerator.createTeam(
+    fun getKansasCityCoyotesPlayers() = htmlGenerator.createTeamPage(
             Team.KANSAS_CITY_COYOTES,
             playerRepository.getKansasCityCoyotesPlayers()
     )
 
     @RequestMapping("/portland_pythons")
-    fun getPortlandPythonsPlayers() = htmlGenerator.createTeam(
+    fun getPortlandPythonsPlayers() = htmlGenerator.createTeamPage(
             Team.PORTLAND_PYTHONS,
             playerRepository.getPortlandPythonsPlayers()
     )
 
     @RequestMapping("/norfolk_seawolves")
-    fun getNorfolkSeawolvesPlayers() = htmlGenerator.createTeam(
+    fun getNorfolkSeawolvesPlayers() = htmlGenerator.createTeamPage(
             Team.NORFOLK_SEAWOLVES,
             playerRepository.getNorfolkSeawolvesPlayers()
     )
 
     @RequestMapping("/san_antonio_marshals")
-    fun getSanAntonioMarshalsPlayers() = htmlGenerator.createTeam(
+    fun getSanAntonioMarshalsPlayers() = htmlGenerator.createTeamPage(
             Team.SAN_ANTONIO_MARSHALS,
             playerRepository.getSanAntonioMarshalsPlayers()
     )
 
     @RequestMapping("/tijuana_luchadores")
-    fun getTijuanaLuchadoresPlayers() = htmlGenerator.createTeam(
+    fun getTijuanaLuchadoresPlayers() = htmlGenerator.createTeamPage(
             Team.TIJUANA_LUCHADORES,
             playerRepository.getTijuanaLuchadoresPlayers()
     )
 
     @RequestMapping("/free_agents")
-    fun getFreeAgents() = htmlGenerator.createTeam(
+    fun getFreeAgents() = htmlGenerator.createTeamPage(
             Team.FREE_AGENTS,
             playerRepository.getFreeAgents()
     )
 
     @RequestMapping("/qb_prospects")
-    fun getQBProspects() = htmlGenerator.createTeam(
+    fun getQBProspects() = htmlGenerator.createTeamPage(
             Team.QB_PROSPECTS,
             playerRepository.getQBProspects()
     )
 
     @RequestMapping("/rb_prospects")
-    fun getRBProspects() = htmlGenerator.createTeam(
+    fun getRBProspects() = htmlGenerator.createTeamPage(
             Team.RB_PROSPECTS,
             playerRepository.getRBProspects()
     )
 
     @RequestMapping("/wr_prospects")
-    fun getWRProspects() = htmlGenerator.createTeam(
+    fun getWRProspects() = htmlGenerator.createTeamPage(
             Team.WR_PROSPECTS,
             playerRepository.getWRProspects()
     )
 
     @RequestMapping("/te_prospects")
-    fun getTEProspects() = htmlGenerator.createTeam(
+    fun getTEProspects() = htmlGenerator.createTeamPage(
             Team.TE_PROSPECTS,
             playerRepository.getTEProspects()
     )
 
     @RequestMapping("/ol_prospects")
-    fun getOLProspects() = htmlGenerator.createTeam(
+    fun getOLProspects() = htmlGenerator.createTeamPage(
             Team.OL_PROSPECTS,
             playerRepository.getOLProspects()
     )
 
     @RequestMapping("/de_prospects")
-    fun getDEProspects() = htmlGenerator.createTeam(
+    fun getDEProspects() = htmlGenerator.createTeamPage(
             Team.DE_PROSPECTS,
             playerRepository.getDEProspects()
     )
 
     @RequestMapping("/dt_prospects")
-    fun getDTProspects() = htmlGenerator.createTeam(
+    fun getDTProspects() = htmlGenerator.createTeamPage(
             Team.DT_PROSPECTS,
             playerRepository.getDTProspects()
     )
 
     @RequestMapping("/lb_prospects")
-    fun getLBProspects() = htmlGenerator.createTeam(
+    fun getLBProspects() = htmlGenerator.createTeamPage(
             Team.LB_PROSPECTS,
             playerRepository.getLBProspects()
     )
 
     @RequestMapping("/cb_prospects")
-    fun getCBProspects() = htmlGenerator.createTeam(
+    fun getCBProspects() = htmlGenerator.createTeamPage(
             Team.CB_PROSPECTS,
             playerRepository.getCBProspects()
     )
 
     @RequestMapping("/s_prospects")
-    fun getSProspects() = htmlGenerator.createTeam(
+    fun getSProspects() = htmlGenerator.createTeamPage(
             Team.S_PROSPECTS,
             playerRepository.getSProspects()
     )
 
     @RequestMapping("/kp_prospects")
-    fun getKPProspects() = htmlGenerator.createTeam(
+    fun getKPProspects() = htmlGenerator.createTeamPage(
             Team.KP_PROSPECTS,
             playerRepository.getKPProspects()
     )
+
+    @Controller
+    class CustomErrorController : ErrorController {
+        override fun getErrorPath() = "/error"
+    }
 }
 
 fun main(args: Array<String>) {
