@@ -48,9 +48,9 @@ class HTMLGenerator {
     ) = TEAM_STATS_HTML.format(
             "Team Stats",
             nsflList.joinToString(",") { pair ->
-                "['NSFL','<a href=\"${pair.first.url}\">${pair.first.full}</a>','${pair.second.getTotalTPE()}','${pair.second.getAverageTPE()}','${pair.second.getTotalTPE()}','${pair.second.getAverageTPE()}','${pair.second.getOffensiveTPE()}','${pair.second.getDefensiveTPE()}']"
+                "['NSFL','<a href=\"${pair.first.url}\">${pair.first.full}</a>','${pair.second.getTotalTPE()}','${pair.second.getAverageTPE()}','${pair.second.getTotalTPE()}','${pair.second.getAverageTPE()}','${pair.second.getOffensiveTPE(false)}','${pair.second.getDefensiveTPE(false)}']"
             } + "," + dsflList.joinToString(",") { pair ->
-                "['DSFL','<a href=\"${pair.first.url}\">${pair.first.full}</a>','${pair.second.getTotalTPE()}','${pair.second.getAverageTPE()}','${pair.second.getTotalEffectiveTPE()}','${pair.second.getAverageEffectiveTPE()}','${pair.second.getOffensiveTPE()}','${pair.second.getDefensiveTPE()}']"
+                "['DSFL','<a href=\"${pair.first.url}\">${pair.first.full}</a>','${pair.second.getTotalTPE()}','${pair.second.getAverageTPE()}','${pair.second.getTotalEffectiveTPE()}','${pair.second.getAverageEffectiveTPE()}','${pair.second.getOffensiveTPE(true)}','${pair.second.getDefensiveTPE(true)}']"
             }
     )
 
@@ -75,24 +75,24 @@ class HTMLGenerator {
 
     private fun List<Player>.getAverageEffectiveTPE() = getTotalEffectiveTPE() / size
 
-    private fun List<Player>.getOffensiveTPE(): Int {
+    private fun List<Player>.getOffensiveTPE(dsfl: Boolean): Int {
 
         val qbList = filter { it.position == Position.QB }.sortedByDescending { it.tpe }
-        val qb1 = getPlayerTPESafe(qbList, 0)
+        val qb1 = getPlayerTPESafe(qbList, 0, dsfl)
 
         val wrList = filter { it.position == Position.WR }.sortedByDescending { it.tpe }
-        val wr1 = getPlayerTPESafe(wrList, 0)
-        val wr2 = getPlayerTPESafe(wrList, 1)
-        val wr3 = getPlayerTPESafe(wrList, 2)
+        val wr1 = getPlayerTPESafe(wrList, 0, dsfl)
+        val wr2 = getPlayerTPESafe(wrList, 1, dsfl)
+        val wr3 = getPlayerTPESafe(wrList, 2, dsfl)
 
         val rbList = filter { it.position == Position.RB }.sortedByDescending { it.tpe }
-        val rb1 = getPlayerTPESafe(rbList, 0)
-        val rb2 = getPlayerTPESafe(rbList, 1)
-        val rb3 = getPlayerTPESafe(rbList, 2)
+        val rb1 = getPlayerTPESafe(rbList, 0, dsfl)
+        val rb2 = getPlayerTPESafe(rbList, 1, dsfl)
+        val rb3 = getPlayerTPESafe(rbList, 2, dsfl)
 
         val teList = filter { it.position == Position.RB }.sortedByDescending { it.tpe }
-        val te1 = getPlayerTPESafe(teList, 0)
-        val te2 = getPlayerTPESafe(teList, 1)
+        val te1 = getPlayerTPESafe(teList, 0, dsfl)
+        val te2 = getPlayerTPESafe(teList, 1, dsfl)
 
         return arrayListOf(
                 qb1 + wr1 + wr2 + wr3 + rb1 + te1,
@@ -103,34 +103,34 @@ class HTMLGenerator {
         ).sortedByDescending { it }.first()
     }
 
-    private fun List<Player>.getDefensiveTPE(): Int {
+    private fun List<Player>.getDefensiveTPE(dsfl: Boolean): Int {
 
         val dtList = filter { it.position == Position.DT }.sortedByDescending { it.tpe }
         val deList = filter { it.position == Position.DE }.sortedByDescending { it.tpe }
         val dLineList = listOf(
-                getPlayerTPESafe(dtList, 0),
-                getPlayerTPESafe(dtList, 1),
-                getPlayerTPESafe(dtList, 2),
-                getPlayerTPESafe(deList, 0),
-                getPlayerTPESafe(deList, 1),
-                getPlayerTPESafe(deList, 2)
+                getPlayerTPESafe(dtList, 0, dsfl),
+                getPlayerTPESafe(dtList, 1, dsfl),
+                getPlayerTPESafe(dtList, 2, dsfl),
+                getPlayerTPESafe(deList, 0, dsfl),
+                getPlayerTPESafe(deList, 1, dsfl),
+                getPlayerTPESafe(deList, 2, dsfl)
         ).sortedByDescending { it }
 
         val lbList = filter { it.position == Position.LB }.sortedByDescending { it.tpe }
-        val lb1 = getPlayerTPESafe(lbList, 0)
-        val lb2 = getPlayerTPESafe(lbList, 1)
-        val lb3 = getPlayerTPESafe(lbList, 2)
-        val lb4 = getPlayerTPESafe(lbList, 3)
+        val lb1 = getPlayerTPESafe(lbList, 0, dsfl)
+        val lb2 = getPlayerTPESafe(lbList, 1, dsfl)
+        val lb3 = getPlayerTPESafe(lbList, 2, dsfl)
+        val lb4 = getPlayerTPESafe(lbList, 3, dsfl)
 
         val cbList = filter { it.position == Position.CB }.sortedByDescending { it.tpe }
         val sList = filter { it.position == Position.S }.sortedByDescending { it.tpe }
         val dBackList = listOf(
-                getPlayerTPESafe(cbList, 0),
-                getPlayerTPESafe(cbList, 1),
-                getPlayerTPESafe(cbList, 2),
-                getPlayerTPESafe(sList, 0),
-                getPlayerTPESafe(sList, 1),
-                getPlayerTPESafe(sList, 2)
+                getPlayerTPESafe(cbList, 0, dsfl),
+                getPlayerTPESafe(cbList, 1, dsfl),
+                getPlayerTPESafe(cbList, 2, dsfl),
+                getPlayerTPESafe(sList, 0, dsfl),
+                getPlayerTPESafe(sList, 1, dsfl),
+                getPlayerTPESafe(sList, 2, dsfl)
         ).sortedByDescending { it }
 
         return arrayListOf(
@@ -142,8 +142,8 @@ class HTMLGenerator {
         ).sortedByDescending { it }.first()
     }
 
-    private fun getPlayerTPESafe(playerList: List<Player>, index: Int) = try {
-        playerList[index].tpe
+    private fun getPlayerTPESafe(playerList: List<Player>, index: Int, dsfl: Boolean) = try {
+        if (dsfl && playerList[index].tpe > 250) 250 else playerList[index].tpe
     } catch (exception: Exception) {
         50
     }
