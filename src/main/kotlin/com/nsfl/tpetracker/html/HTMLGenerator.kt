@@ -90,7 +90,7 @@ class HTMLGenerator {
         val rb2 = getPlayerTPESafe(rbList, 1, dsfl)
         val rb3 = getPlayerTPESafe(rbList, 2, dsfl)
 
-        val teList = filter { it.position == Position.RB }.sortedByDescending { it.tpe }
+        val teList = filter { it.position == Position.TE }.sortedByDescending { it.tpe }
         val te1 = getPlayerTPESafe(teList, 0, dsfl)
         val te2 = getPlayerTPESafe(teList, 1, dsfl)
 
