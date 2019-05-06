@@ -38,7 +38,7 @@ class PlayerDatabase {
         tpeHistoryList.add(Pair("", 50))
 
         getConnection().let {
-            val ruleSet = it.createStatement().executeQuery("SELECT * FROM players WHERE player_id='$playerId'")
+            val ruleSet = it.createStatement().executeQuery("SELECT * FROM players WHERE player_id='$playerId' ORDER BY id ASC")
             it.close()
             while (ruleSet.next()) {
                 tpeHistoryList.add(
