@@ -1,5 +1,6 @@
 package com.nsfl.tpetracker.model.player
 
+import com.nsfl.tpetracker.model.position.Position
 import com.nsfl.tpetracker.model.team.Team
 
 class PlayerRepository {
@@ -94,4 +95,37 @@ class PlayerRepository {
 
     fun getKPProspects() =
             playerList.filter { it.team == Team.KP_PROSPECTS }
+
+    fun getQBPlayers() =
+            playerList.filter { it.position == Position.QB }
+
+    fun getRBPlayers() =
+            playerList.filter { it.position == Position.RB }
+
+    fun getWRPlayers() =
+            playerList.filter { it.position == Position.WR }
+
+    fun getTEPlayers() =
+            playerList.filter { it.position == Position.TE }
+
+    fun getOLPlayers() =
+            playerList.filter { it.position == Position.OL }
+
+    fun getDEPlayers() =
+            playerList.filter { it.position == Position.DE }
+
+    fun getDTPlayers() =
+            playerList.filter { it.position == Position.DT }
+
+    fun getLBPlayers() =
+            playerList.filter { it.position == Position.LB }
+
+    fun getCBPlayers() =
+            playerList.filter { it.position == Position.CB }
+
+    fun getSPlayers() =
+            playerList.filter { it.position == Position.S }
+
+    fun getKPPlayers() =
+            playerList.filter { it.position == Position.KP }
 }

@@ -3,6 +3,7 @@ package com.nsfl.tpetracker
 import com.nsfl.tpetracker.html.HTMLGenerator
 import com.nsfl.tpetracker.model.pasta.CopyPastaRepository
 import com.nsfl.tpetracker.model.player.PlayerRepository
+import com.nsfl.tpetracker.model.position.Position
 import com.nsfl.tpetracker.model.team.Team
 import org.slf4j.LoggerFactory
 import org.springframework.boot.autoconfigure.SpringBootApplication
@@ -72,7 +73,7 @@ class Application {
             htmlGenerator.createAllPlayersPage(playerRepository.getAllPlayers())
 
     @RequestMapping("/player")
-    fun getAllPlayers(@RequestParam playerId: String) =
+    fun getPlayer(@RequestParam playerId: String) =
             playerRepository.getPlayer(playerId).let {
                 htmlGenerator.createPlayerPage(it)
             }
@@ -96,6 +97,23 @@ class Application {
                     Pair(Team.NORFOLK_SEAWOLVES, playerRepository.getNorfolkSeawolvesPlayers()),
                     Pair(Team.SAN_ANTONIO_MARSHALS, playerRepository.getSanAntonioMarshalsPlayers()),
                     Pair(Team.TIJUANA_LUCHADORES, playerRepository.getTijuanaLuchadoresPlayers())
+            )
+    )
+
+    @RequestMapping("/position_stats")
+    fun getPositionStats() = htmlGenerator.createPositionStatsPage(
+            listOf(
+                    Pair(Position.QB, playerRepository.getQBPlayers()),
+                    Pair(Position.RB, playerRepository.getRBPlayers()),
+                    Pair(Position.WR, playerRepository.getWRPlayers()),
+                    Pair(Position.TE, playerRepository.getTEPlayers()),
+                    Pair(Position.OL, playerRepository.getOLPlayers()),
+                    Pair(Position.DE, playerRepository.getDEPlayers()),
+                    Pair(Position.DT, playerRepository.getDTPlayers()),
+                    Pair(Position.LB, playerRepository.getLBPlayers()),
+                    Pair(Position.CB, playerRepository.getCBPlayers()),
+                    Pair(Position.S, playerRepository.getSPlayers()),
+                    Pair(Position.KP, playerRepository.getKPPlayers())
             )
     )
 
