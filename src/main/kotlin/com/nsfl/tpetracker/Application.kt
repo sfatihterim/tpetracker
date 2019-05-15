@@ -118,6 +118,13 @@ class Application {
             )
     )
 
+    @RequestMapping("/activity_check_query")
+    fun getActivityCheckQuery() = htmlGenerator.createActivityCheckQueryPage()
+
+    @RequestMapping("/activity_check_result")
+    fun getActivityCheckResult(@RequestParam startDate: String, @RequestParam endDate: String) =
+            htmlGenerator.createActivityCheckResultPage(startDate, endDate, playerRepository.getAllPlayers())
+
     @RequestMapping("/baltimore_hawks")
     fun getBaltimoreHawksPlayers() = htmlGenerator.createTeamPage(
             Team.BALTIMORE_HAWKS,
