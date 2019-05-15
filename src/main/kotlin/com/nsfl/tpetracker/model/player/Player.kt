@@ -9,5 +9,7 @@ class Player(
         val team: Team,
         val position: Position,
         val draftYear: String,
-        val tpe: Int
+        val tpe: Int,
+        val tpeHistoryList: List<Pair<String, Int>>,
+        val lastUpdated: String
 )

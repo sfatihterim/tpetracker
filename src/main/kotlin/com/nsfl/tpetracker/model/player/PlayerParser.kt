@@ -8,13 +8,13 @@ import java.util.regex.Pattern
 
 class PlayerParser {
 
-    fun parseAll() = ArrayList<Player>().apply {
+    fun parseAll() = ArrayList<ParsedPlayer>().apply {
         Team.values().forEach { addAll(parsePlayers(it)) }
     }
 
-    private fun parsePlayers(team: Team): ArrayList<Player> {
+    private fun parsePlayers(team: Team): List<ParsedPlayer> {
 
-        val playerList = ArrayList<Player>()
+        val playerList = ArrayList<ParsedPlayer>()
         val documentList = ArrayList<Document>()
 
         val firstDocument = Jsoup.connect("http://nsfl.jcink.net/index.php?showforum=${team.id}").get()
@@ -42,7 +42,7 @@ class PlayerParser {
                             val playerInfo = parsePlayerInfo(it).split("?")
                             if (playerInfo.size == 3) {
                                 playerList.add(
-                                        Player(
+                                        ParsedPlayer(
                                                 parsePlayerID(it),
                                                 playerInfo[1].trim(),
                                                 team,
@@ -109,4 +109,13 @@ class PlayerParser {
         val endIndex = elementString.indexOf("\"", startIndex)
         return elementString.substring(startIndex, endIndex)
     }
+
+    class ParsedPlayer(
+            val id: String,
+            val name: String,
+            val team: Team,
+            val position: Position,
+            val draftYear: String,
+            val tpe: Int
+    )
 }

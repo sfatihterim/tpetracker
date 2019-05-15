@@ -9,15 +9,11 @@ class PlayerRepository {
     private val playerList = ArrayList<Player>()
 
     fun update() {
-        val newPlayerList = playerParser.parseAll()
         playerList.clear()
-        playerList.addAll(newPlayerList)
-        playerDatabase.updatePlayers(newPlayerList)
+        playerList.addAll(playerDatabase.updatePlayers(playerParser.parseAll()))
     }
 
     fun getPlayer(playerId: String) = playerList.first { it.id == playerId }
-
-    fun getPlayerTPEHistory(playerId: String) = playerDatabase.getPlayerTPEHistory(playerId)
 
     fun getAllPlayers() = playerList
 

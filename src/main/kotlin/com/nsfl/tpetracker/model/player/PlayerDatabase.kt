@@ -4,13 +4,10 @@ import java.sql.DriverManager
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import kotlin.collections.ArrayList
-import kotlin.collections.List
-import kotlin.collections.arrayListOf
-import kotlin.collections.joinToString
 
 class PlayerDatabase {
 
-    fun updatePlayers(playerList: List<Player>) {
+    fun updatePlayers(parsedPlayerList: List<PlayerParser.ParsedPlayer>): ArrayList<Player> {
 
         val saturday = SimpleDateFormat("MM/dd/yyyy").format(
                 Calendar.getInstance().apply {
@@ -21,33 +18,68 @@ class PlayerDatabase {
                 }.timeInMillis
         )
 
-        val values = playerList.joinToString(",") {
+        val values = parsedPlayerList.joinToString(",") {
             "(DEFAULT,'${it.id}','$saturday','${it.draftYear}','${it.team}','${it.name}','${it.position}','${it.tpe}')"
         }
 
-        getConnection().let {
-            it.createStatement().execute("DELETE FROM players WHERE date='$saturday'")
-            it.createStatement().execute("INSERT INTO players VALUES %s;".format(values))
-            it.close()
-        }
-    }
+        val connection = getConnection()
+        connection.createStatement().execute("DELETE FROM players WHERE date='$saturday'")
+        connection.createStatement().execute("INSERT INTO players VALUES %s;".format(values))
 
-    fun getPlayerTPEHistory(playerId: String): List<Pair<String, Int>> {
+        val playerList = ArrayList<Player>()
+        parsedPlayerList.forEach { player ->
 
-        val tpeHistoryList = ArrayList<Pair<String, Int>>()
-        tpeHistoryList.add(Pair("", 50))
+            val tpeHistoryList = ArrayList<Pair<String, Int>>()
+            tpeHistoryList.add(Pair("", 50))
 
-        getConnection().let {
-            val ruleSet = it.createStatement().executeQuery("SELECT * FROM players WHERE player_id='$playerId' ORDER BY id ASC")
-            it.close()
+            val ruleSet = connection.createStatement().executeQuery(
+                    "SELECT * FROM players WHERE player_id='${player.id}' ORDER BY id ASC"
+            )
+
             while (ruleSet.next()) {
                 tpeHistoryList.add(
-                        Pair(ruleSet.getString("date").substring(0, 5), ruleSet.getInt("tpe"))
+                        Pair(ruleSet.getString("date"), ruleSet.getInt("tpe"))
                 )
             }
+
+            var lastUpdated = "-"
+            var i = tpeHistoryList.lastIndex
+
+            while (i > 0) {
+                if (tpeHistoryList[i].second != tpeHistoryList[i - 1].second) {
+                    lastUpdated = tpeHistoryList[i].first.substring(6) + "/" + tpeHistoryList[i].first.substring(0, 5)
+                    i = 0
+                } else {
+                    i--
+                }
+            }
+
+            playerList.add(
+                    Player(
+                            player.id,
+                            player.name,
+                            player.team,
+                            player.position,
+                            player.draftYear,
+                            player.tpe,
+                            tpeHistoryList.mapIndexed { index, pair ->
+                                Pair(
+                                        if (index == 0) {
+                                            pair.first
+                                        } else {
+                                            pair.first.substring(0, 5)
+                                        },
+                                        pair.second
+                                )
+                            },
+                            lastUpdated
+                    )
+            )
         }
 
-        return tpeHistoryList
+        connection.close()
+
+        return playerList
     }
 
     private fun getConnection() = DriverManager.getConnection(System.getenv("JDBC_DATABASE_URL"))

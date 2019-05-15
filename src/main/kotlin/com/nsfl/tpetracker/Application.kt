@@ -73,10 +73,9 @@ class Application {
 
     @RequestMapping("/player")
     fun getAllPlayers(@RequestParam playerId: String) =
-            htmlGenerator.createPlayerPage(
-                    playerRepository.getPlayer(playerId),
-                    playerRepository.getPlayerTPEHistory(playerId)
-            )
+            playerRepository.getPlayer(playerId).let {
+                htmlGenerator.createPlayerPage(it)
+            }
 
     @RequestMapping("/team_stats")
     fun getTeamStats() = htmlGenerator.createTeamStatsPage(
