@@ -32,7 +32,9 @@ class Application {
     private val htmlGenerator = HTMLGenerator()
 
     init {
-        updatePlayers("Initial")
+        Thread {
+            updatePlayers("Initial")
+        }.start()
     }
 
     @Scheduled(cron = "0 0 10 * * MON-FRI")

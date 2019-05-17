@@ -41,9 +41,17 @@ class PlayerParser {
                         element.toString().let {
                             val playerInfo = parsePlayerInfo(it).split("?")
                             if (playerInfo.size == 3) {
+
+                                val playerId = parsePlayerID(it)
+
+                                val playerPost = Jsoup.connect("http://nsfl.jcink.net/index.php?showtopic=$playerId")
+                                        .get().body()
+                                        .getElementsByClass("post-normal")[0]
+                                        .getElementsByClass("postcolor").toString()
+
                                 playerList.add(
                                         ParsedPlayer(
-                                                parsePlayerID(it),
+                                                playerId,
                                                 playerInfo[1].trim(),
                                                 team,
                                                 Position.fromAbbreviation(playerInfo[2].trim()),
@@ -54,7 +62,20 @@ class PlayerParser {
                                                         info
                                                     }
                                                 },
-                                                parseTPE(it)
+                                                parsePlayerTPE(it),
+                                                parsePlayerAttribute(playerPost, "strength:"),
+                                                parsePlayerAttribute(playerPost, "agility:"),
+                                                parsePlayerAttribute(playerPost, "arm:"),
+                                                parsePlayerAttribute(playerPost, "intelligence:"),
+                                                parsePlayerAttribute(playerPost, "throwing accuracy:"),
+                                                parsePlayerAttribute(playerPost, "tackling:"),
+                                                parsePlayerAttribute(playerPost, "speed:"),
+                                                parsePlayerAttribute(playerPost, "hands:"),
+                                                parsePlayerAttribute(playerPost, "pass blocking:"),
+                                                parsePlayerAttribute(playerPost, "run blocking:"),
+                                                parsePlayerAttribute(playerPost, "endurance:"),
+                                                parsePlayerAttribute(playerPost, "kick power:"),
+                                                parsePlayerAttribute(playerPost, "kick accuracy:")
                                         )
                                 )
                             }
@@ -91,7 +112,7 @@ class PlayerParser {
                 .reversed()
     }
 
-    private fun parseTPE(elementString: String): Int {
+    private fun parsePlayerTPE(elementString: String): Int {
         return try {
             val startIndex = elementString.indexOf("TPE:")
             val endIndex = elementString.indexOf("<", startIndex)
@@ -110,12 +131,53 @@ class PlayerParser {
         return elementString.substring(startIndex, endIndex)
     }
 
+    private fun parsePlayerAttribute(post: String, attributeName: String): Int {
+        return try {
+
+            var attribute = ""
+            var started = false
+            var finished = false
+            var index = post.indexOf(attributeName, ignoreCase = true)
+
+            while (!finished) {
+
+                val char = post[index]
+
+                if (char.isDigit()) {
+                    started = true
+                    attribute += char
+                } else if (started) {
+                    finished = true
+                }
+
+                index++
+            }
+
+            attribute.toInt()
+        } catch (exception: Exception) {
+            -999
+        }
+    }
+
     class ParsedPlayer(
             val id: String,
             val name: String,
             val team: Team,
             val position: Position,
             val draftYear: String,
-            val tpe: Int
+            val tpe: Int,
+            val strength: Int,
+            val agility: Int,
+            val arm: Int,
+            val intelligence: Int,
+            val throwingAccuracy: Int,
+            val tackling: Int,
+            val speed: Int,
+            val hands: Int,
+            val passBlocking: Int,
+            val runBlocking: Int,
+            val endurance: Int,
+            val kickPower: Int,
+            val kickAccuracy: Int
     )
 }

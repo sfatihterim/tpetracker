@@ -72,6 +72,19 @@ class PlayerDatabase {
                                         pair.second
                                 )
                             },
+                            player.strength,
+                            player.agility,
+                            player.arm,
+                            player.intelligence,
+                            player.throwingAccuracy,
+                            player.tackling,
+                            player.speed,
+                            player.hands,
+                            player.passBlocking,
+                            player.runBlocking,
+                            player.endurance,
+                            player.kickPower,
+                            player.kickAccuracy,
                             lastUpdated
                     )
             )
