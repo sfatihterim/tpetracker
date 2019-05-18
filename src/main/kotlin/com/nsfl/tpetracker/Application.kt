@@ -5,7 +5,6 @@ import com.nsfl.tpetracker.model.pasta.CopyPastaRepository
 import com.nsfl.tpetracker.model.player.PlayerRepository
 import com.nsfl.tpetracker.model.position.Position
 import com.nsfl.tpetracker.model.team.Team
-import org.slf4j.LoggerFactory
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 import org.springframework.boot.web.servlet.error.ErrorController
@@ -24,12 +23,10 @@ import javax.servlet.http.HttpServletRequest
 @EnableScheduling
 class Application {
 
-    private val logger = LoggerFactory.getLogger("TPETrackerApplication ")
-    private var lastUpdateInfo = ""
-
     private val playerRepository = PlayerRepository()
     private val copyPastaRepository = CopyPastaRepository()
     private val htmlGenerator = HTMLGenerator()
+    private var lastUpdateInfo = ""
 
     init {
         Thread {
@@ -48,14 +45,14 @@ class Application {
     }
 
     private fun updatePlayers(type: String) {
-        logger.info("$type player update started.")
+        Logger.info("$type player update started.")
         val start = System.currentTimeMillis()
         playerRepository.update()
         lastUpdateInfo = "Last Update =>" +
                 " Type: $type," +
                 " Started At: ${Date(start)}," +
                 " Duration: ${System.currentTimeMillis() - start} ms"
-        logger.info("$type player update finished.")
+        Logger.info("$type player update finished.")
     }
 
     @RequestMapping("/last_update")

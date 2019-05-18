@@ -10,8 +10,9 @@ class PlayerRepository {
     private val playerList = ArrayList<Player>()
 
     fun update() {
+        val newPlayerList = playerDatabase.updatePlayers(playerParser.parseAll())
         playerList.clear()
-        playerList.addAll(playerDatabase.updatePlayers(playerParser.parseAll()))
+        playerList.addAll(newPlayerList)
     }
 
     fun getPlayer(playerId: String) = playerList.first { it.id == playerId }

@@ -1,5 +1,6 @@
 package com.nsfl.tpetracker.model.player
 
+import com.nsfl.tpetracker.Logger
 import com.nsfl.tpetracker.model.position.Position
 import com.nsfl.tpetracker.model.team.Team
 import org.jsoup.Jsoup
@@ -17,17 +18,13 @@ class PlayerParser {
         val playerList = ArrayList<ParsedPlayer>()
         val documentList = ArrayList<Document>()
 
-        val firstDocument = Jsoup.connect("http://nsfl.jcink.net/index.php?showforum=${team.id}").get()
+        val firstDocument = connect("http://nsfl.jcink.net/index.php?showforum=${team.id}")
         documentList.add(firstDocument)
 
         val pageCount = parsePageCount(firstDocument.body().toString())
 
         for (i in 1..(pageCount - 1)) {
-            documentList.add(
-                    Jsoup.connect(
-                            "http://nsfl.jcink.net/index.php?showforum=${team.id}&st=${i * 15}"
-                    ).get()
-            )
+            documentList.add(connect("http://nsfl.jcink.net/index.php?showforum=${team.id}&st=${i * 15}"))
         }
 
         documentList.forEach { document ->
@@ -44,10 +41,11 @@ class PlayerParser {
 
                                 val playerId = parsePlayerID(it)
 
-                                val playerPost = Jsoup.connect("http://nsfl.jcink.net/index.php?showtopic=$playerId")
-                                        .get().body()
+                                val playerPost = connect("http://nsfl.jcink.net/index.php?showtopic=$playerId")
+                                        .body()
                                         .getElementsByClass("post-normal")[0]
-                                        .getElementsByClass("postcolor").toString()
+                                        .getElementsByClass("postcolor")
+                                        .toString()
 
                                 playerList.add(
                                         ParsedPlayer(
@@ -156,6 +154,16 @@ class PlayerParser {
             attribute.toInt()
         } catch (exception: Exception) {
             -999
+        }
+    }
+
+    private fun connect(url: String): Document {
+        while (true) {
+            try {
+                return Jsoup.connect(url).get()
+            } catch (exception: Exception) {
+                Logger.error("Jsoup.connect failed. $exception")
+            }
         }
     }
 
