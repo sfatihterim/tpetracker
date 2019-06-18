@@ -7,10 +7,12 @@ enum class Team(
         val type: Type
 ) {
     BALTIMORE_HAWKS("69", "/baltimore_hawks", "Baltimore Hawks", Type.NSFL),
+    CHICAGO_BUTCHERS("324", "/chicago_butchers", "Chicago Butchers", Type.NSFL),
     COLORADO_YETI("55", "/colorado_yeti", "Colorado Yeti", Type.NSFL),
     PHILADELPHIA_LIBERTY("110", "/philadelphia_liberty", "Philadelphia Liberty", Type.NSFL),
     YELLOWKNIFE_WRAITHS("57", "/yellowknife_wraiths", "Yellowknife Wraiths", Type.NSFL),
     ARIZONA_OUTLAWS("72", "/arizona_outlaws", "Arizona Outlaws", Type.NSFL),
+    AUSTIN_COPPERHEADS("327", "/austin_copperheads", "Austin Copperheads", Type.NSFL),
     NEW_ORLEANS_SECOND_LINE("113", "/new_orleans_second_line", "New Orleans Second Line", Type.NSFL),
     ORANGE_COUNTY_OTTERS("53", "/orange_county_otters", "Orange County Otters", Type.NSFL),
     SAN_JOSE_SABERCATS("51", "/san_jose_sabercats", "San Jose SaberCats", Type.NSFL),

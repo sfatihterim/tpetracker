@@ -22,6 +22,9 @@ class PlayerRepository {
     fun getBaltimoreHawksPlayers() =
             playerList.filter { it.team == Team.BALTIMORE_HAWKS }
 
+    fun getChicagoButchersPlayers() =
+            playerList.filter { it.team == Team.CHICAGO_BUTCHERS }
+
     fun getColoradoYetiPlayers() =
             playerList.filter { it.team == Team.COLORADO_YETI }
 
@@ -33,6 +36,9 @@ class PlayerRepository {
 
     fun getArizonaOutlawsPlayers() =
             playerList.filter { it.team == Team.ARIZONA_OUTLAWS }
+
+    fun getAustinCopperheadsPlayers() =
+            playerList.filter { it.team == Team.AUSTIN_COPPERHEADS }
 
     fun getNewOrleansSecondLinePlayers() =
             playerList.filter { it.team == Team.NEW_ORLEANS_SECOND_LINE }

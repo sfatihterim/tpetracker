@@ -81,10 +81,12 @@ class Application {
     fun getTeamStats() = htmlGenerator.createTeamStatsPage(
             listOf(
                     Pair(Team.BALTIMORE_HAWKS, playerRepository.getBaltimoreHawksPlayers()),
+                    Pair(Team.CHICAGO_BUTCHERS, playerRepository.getChicagoButchersPlayers()),
                     Pair(Team.COLORADO_YETI, playerRepository.getColoradoYetiPlayers()),
                     Pair(Team.PHILADELPHIA_LIBERTY, playerRepository.getPhiladelphiaLibertyPlayers()),
                     Pair(Team.YELLOWKNIFE_WRAITHS, playerRepository.getYellowknifeWraithsPlayers()),
                     Pair(Team.ARIZONA_OUTLAWS, playerRepository.getArizonaOutlawsPlayers()),
+                    Pair(Team.AUSTIN_COPPERHEADS, playerRepository.getAustinCopperheadsPlayers()),
                     Pair(Team.NEW_ORLEANS_SECOND_LINE, playerRepository.getNewOrleansSecondLinePlayers()),
                     Pair(Team.ORANGE_COUNTY_OTTERS, playerRepository.getOrangeCountyOttersPlayers()),
                     Pair(Team.SAN_JOSE_SABERCATS, playerRepository.getSanJoseSabercatsPlayers())
@@ -122,6 +124,12 @@ class Application {
             playerRepository.getBaltimoreHawksPlayers()
     )
 
+    @RequestMapping("/chicago_butchers")
+    fun getChicagoButchersPlayers() = htmlGenerator.createTeamPage(
+            Team.CHICAGO_BUTCHERS,
+            playerRepository.getChicagoButchersPlayers()
+    )
+
     @RequestMapping("/colorado_yeti")
     fun getColoradoYetiPlayers() = htmlGenerator.createTeamPage(
             Team.COLORADO_YETI,
@@ -144,6 +152,12 @@ class Application {
     fun getArizonaOutlawsPlayers() = htmlGenerator.createTeamPage(
             Team.ARIZONA_OUTLAWS,
             playerRepository.getArizonaOutlawsPlayers()
+    )
+
+    @RequestMapping("/austin_copperheads")
+    fun getAustinCopperheadsPlayers() = htmlGenerator.createTeamPage(
+            Team.AUSTIN_COPPERHEADS,
+            playerRepository.getAustinCopperheadsPlayers()
     )
 
     @RequestMapping("/new_orleans_second_line")
