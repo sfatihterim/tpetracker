@@ -32,6 +32,7 @@ class PlayerParser {
                     ?.filter { element ->
                         element.toString().let {
                             it.startsWith("<td class=\"row4\"")
+                                    && !it.contains("Moved:")
                                     && it.contains(">(S")
                         }
                     }?.forEach { element ->
