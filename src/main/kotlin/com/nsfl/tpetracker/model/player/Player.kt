@@ -5,6 +5,7 @@ import com.nsfl.tpetracker.model.team.Team
 
 class Player(
         val id: String,
+        val user: String,
         val name: String,
         val team: Team,
         val position: Position,

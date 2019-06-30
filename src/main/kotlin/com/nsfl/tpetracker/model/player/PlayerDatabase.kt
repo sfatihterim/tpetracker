@@ -57,6 +57,7 @@ class PlayerDatabase {
             playerList.add(
                     Player(
                             player.id,
+                            player.user,
                             player.name,
                             player.team,
                             player.position,

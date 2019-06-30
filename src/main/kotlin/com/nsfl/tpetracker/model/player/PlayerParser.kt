@@ -45,12 +45,14 @@ class PlayerParser {
                                 val playerPost = connect("http://nsfl.jcink.net/index.php?showtopic=$playerId")
                                         .body()
                                         .getElementsByClass("post-normal")[0]
-                                        .getElementsByClass("postcolor")
-                                        .toString()
+
+                                val user = playerPost.getElementsByClass("normalname").text()
+                                val attributes = playerPost.getElementsByClass("postcolor").toString()
 
                                 playerList.add(
                                         ParsedPlayer(
                                                 playerId,
+                                                user.replace("'", "’"),
                                                 playerInfo[1].trim(),
                                                 team,
                                                 Position.fromAbbreviation(playerInfo[2].trim()),
@@ -62,19 +64,19 @@ class PlayerParser {
                                                     }
                                                 },
                                                 parsePlayerTPE(it),
-                                                parsePlayerAttribute(playerPost, "strength:"),
-                                                parsePlayerAttribute(playerPost, "agility:"),
-                                                parsePlayerAttribute(playerPost, "arm:"),
-                                                parsePlayerAttribute(playerPost, "intelligence:"),
-                                                parsePlayerAttribute(playerPost, "throwing accuracy:"),
-                                                parsePlayerAttribute(playerPost, "tackling:"),
-                                                parsePlayerAttribute(playerPost, "speed:"),
-                                                parsePlayerAttribute(playerPost, "hands:"),
-                                                parsePlayerAttribute(playerPost, "pass blocking:"),
-                                                parsePlayerAttribute(playerPost, "run blocking:"),
-                                                parsePlayerAttribute(playerPost, "endurance:"),
-                                                parsePlayerAttribute(playerPost, "kick power:"),
-                                                parsePlayerAttribute(playerPost, "kick accuracy:")
+                                                parsePlayerAttribute(attributes, "strength:"),
+                                                parsePlayerAttribute(attributes, "agility:"),
+                                                parsePlayerAttribute(attributes, "arm:"),
+                                                parsePlayerAttribute(attributes, "intelligence:"),
+                                                parsePlayerAttribute(attributes, "throwing accuracy:"),
+                                                parsePlayerAttribute(attributes, "tackling:"),
+                                                parsePlayerAttribute(attributes, "speed:"),
+                                                parsePlayerAttribute(attributes, "hands:"),
+                                                parsePlayerAttribute(attributes, "pass blocking:"),
+                                                parsePlayerAttribute(attributes, "run blocking:"),
+                                                parsePlayerAttribute(attributes, "endurance:"),
+                                                parsePlayerAttribute(attributes, "kick power:"),
+                                                parsePlayerAttribute(attributes, "kick accuracy:")
                                         )
                                 )
                             }
@@ -170,6 +172,7 @@ class PlayerParser {
 
     class ParsedPlayer(
             val id: String,
+            val user: String,
             val name: String,
             val team: Team,
             val position: Position,
