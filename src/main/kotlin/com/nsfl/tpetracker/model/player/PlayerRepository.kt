@@ -7,132 +7,142 @@ class PlayerRepository {
 
     private val playerParser = PlayerParser()
     private val playerDatabase = PlayerDatabase()
-    private val playerList = ArrayList<Player>()
+    private val activePlayerList = ArrayList<ActivePlayer>()
+    private val retiredPlayerList = ArrayList<RetiredPlayer>()
 
     fun update() {
-        val newPlayerList = playerDatabase.updatePlayers(playerParser.parseAll())
-        playerList.clear()
-        playerList.addAll(newPlayerList)
+
+        val newActivePlayerList = playerDatabase.updateActivePlayers(playerParser.parseActivePlayers())
+        activePlayerList.clear()
+        activePlayerList.addAll(newActivePlayerList)
+
+        val newRetiredPlayerList = playerDatabase.getRetiredPlayers(activePlayerList)
+        retiredPlayerList.clear()
+        retiredPlayerList.addAll(newRetiredPlayerList)
     }
 
-    fun getPlayer(playerId: String) = playerList.first { it.id == playerId }
+    fun getPlayer(playerId: String) =
+            activePlayerList.firstOrNull { it.id == playerId }
+                    ?: retiredPlayerList.first { it.id == playerId }
 
-    fun getAllPlayers() = playerList
+    fun getAllPlayers() = activePlayerList
 
     fun getBaltimoreHawksPlayers() =
-            playerList.filter { it.team == Team.BALTIMORE_HAWKS }
+            activePlayerList.filter { it.team == Team.BALTIMORE_HAWKS }
 
     fun getChicagoButchersPlayers() =
-            playerList.filter { it.team == Team.CHICAGO_BUTCHERS }
+            activePlayerList.filter { it.team == Team.CHICAGO_BUTCHERS }
 
     fun getColoradoYetiPlayers() =
-            playerList.filter { it.team == Team.COLORADO_YETI }
+            activePlayerList.filter { it.team == Team.COLORADO_YETI }
 
     fun getPhiladelphiaLibertyPlayers() =
-            playerList.filter { it.team == Team.PHILADELPHIA_LIBERTY }
+            activePlayerList.filter { it.team == Team.PHILADELPHIA_LIBERTY }
 
     fun getYellowknifeWraithsPlayers() =
-            playerList.filter { it.team == Team.YELLOWKNIFE_WRAITHS }
+            activePlayerList.filter { it.team == Team.YELLOWKNIFE_WRAITHS }
 
     fun getArizonaOutlawsPlayers() =
-            playerList.filter { it.team == Team.ARIZONA_OUTLAWS }
+            activePlayerList.filter { it.team == Team.ARIZONA_OUTLAWS }
 
     fun getAustinCopperheadsPlayers() =
-            playerList.filter { it.team == Team.AUSTIN_COPPERHEADS }
+            activePlayerList.filter { it.team == Team.AUSTIN_COPPERHEADS }
 
     fun getNewOrleansSecondLinePlayers() =
-            playerList.filter { it.team == Team.NEW_ORLEANS_SECOND_LINE }
+            activePlayerList.filter { it.team == Team.NEW_ORLEANS_SECOND_LINE }
 
     fun getOrangeCountyOttersPlayers() =
-            playerList.filter { it.team == Team.ORANGE_COUNTY_OTTERS }
+            activePlayerList.filter { it.team == Team.ORANGE_COUNTY_OTTERS }
 
     fun getSanJoseSabercatsPlayers() =
-            playerList.filter { it.team == Team.SAN_JOSE_SABERCATS }
+            activePlayerList.filter { it.team == Team.SAN_JOSE_SABERCATS }
 
     fun getPalmBeachSolarBearsPlayers() =
-            playerList.filter { it.team == Team.PALM_BEACH_SOLAR_BEARS }
+            activePlayerList.filter { it.team == Team.PALM_BEACH_SOLAR_BEARS }
 
     fun getKansasCityCoyotesPlayers() =
-            playerList.filter { it.team == Team.KANSAS_CITY_COYOTES }
+            activePlayerList.filter { it.team == Team.KANSAS_CITY_COYOTES }
 
     fun getPortlandPythonsPlayers() =
-            playerList.filter { it.team == Team.PORTLAND_PYTHONS }
+            activePlayerList.filter { it.team == Team.PORTLAND_PYTHONS }
 
     fun getNorfolkSeawolvesPlayers() =
-            playerList.filter { it.team == Team.NORFOLK_SEAWOLVES }
+            activePlayerList.filter { it.team == Team.NORFOLK_SEAWOLVES }
 
     fun getSanAntonioMarshalsPlayers() =
-            playerList.filter { it.team == Team.SAN_ANTONIO_MARSHALS }
+            activePlayerList.filter { it.team == Team.SAN_ANTONIO_MARSHALS }
 
     fun getTijuanaLuchadoresPlayers() =
-            playerList.filter { it.team == Team.TIJUANA_LUCHADORES }
+            activePlayerList.filter { it.team == Team.TIJUANA_LUCHADORES }
 
     fun getFreeAgents() =
-            playerList.filter { it.team == Team.FREE_AGENTS }
+            activePlayerList.filter { it.team == Team.FREE_AGENTS }
 
     fun getQBProspects() =
-            playerList.filter { it.team == Team.QB_PROSPECTS }
+            activePlayerList.filter { it.team == Team.QB_PROSPECTS }
 
     fun getRBProspects() =
-            playerList.filter { it.team == Team.RB_PROSPECTS }
+            activePlayerList.filter { it.team == Team.RB_PROSPECTS }
 
     fun getWRProspects() =
-            playerList.filter { it.team == Team.WR_PROSPECTS }
+            activePlayerList.filter { it.team == Team.WR_PROSPECTS }
 
     fun getTEProspects() =
-            playerList.filter { it.team == Team.TE_PROSPECTS }
+            activePlayerList.filter { it.team == Team.TE_PROSPECTS }
 
     fun getOLProspects() =
-            playerList.filter { it.team == Team.OL_PROSPECTS }
+            activePlayerList.filter { it.team == Team.OL_PROSPECTS }
 
     fun getDEProspects() =
-            playerList.filter { it.team == Team.DE_PROSPECTS }
+            activePlayerList.filter { it.team == Team.DE_PROSPECTS }
 
     fun getDTProspects() =
-            playerList.filter { it.team == Team.DT_PROSPECTS }
+            activePlayerList.filter { it.team == Team.DT_PROSPECTS }
 
     fun getLBProspects() =
-            playerList.filter { it.team == Team.LB_PROSPECTS }
+            activePlayerList.filter { it.team == Team.LB_PROSPECTS }
 
     fun getCBProspects() =
-            playerList.filter { it.team == Team.CB_PROSPECTS }
+            activePlayerList.filter { it.team == Team.CB_PROSPECTS }
 
     fun getSProspects() =
-            playerList.filter { it.team == Team.S_PROSPECTS }
+            activePlayerList.filter { it.team == Team.S_PROSPECTS }
 
     fun getKPProspects() =
-            playerList.filter { it.team == Team.KP_PROSPECTS }
+            activePlayerList.filter { it.team == Team.KP_PROSPECTS }
 
     fun getQBPlayers() =
-            playerList.filter { it.position == Position.QB }
+            activePlayerList.filter { it.position == Position.QB }
 
     fun getRBPlayers() =
-            playerList.filter { it.position == Position.RB }
+            activePlayerList.filter { it.position == Position.RB }
 
     fun getWRPlayers() =
-            playerList.filter { it.position == Position.WR }
+            activePlayerList.filter { it.position == Position.WR }
 
     fun getTEPlayers() =
-            playerList.filter { it.position == Position.TE }
+            activePlayerList.filter { it.position == Position.TE }
 
     fun getOLPlayers() =
-            playerList.filter { it.position == Position.OL }
+            activePlayerList.filter { it.position == Position.OL }
 
     fun getDEPlayers() =
-            playerList.filter { it.position == Position.DE }
+            activePlayerList.filter { it.position == Position.DE }
 
     fun getDTPlayers() =
-            playerList.filter { it.position == Position.DT }
+            activePlayerList.filter { it.position == Position.DT }
 
     fun getLBPlayers() =
-            playerList.filter { it.position == Position.LB }
+            activePlayerList.filter { it.position == Position.LB }
 
     fun getCBPlayers() =
-            playerList.filter { it.position == Position.CB }
+            activePlayerList.filter { it.position == Position.CB }
 
     fun getSPlayers() =
-            playerList.filter { it.position == Position.S }
+            activePlayerList.filter { it.position == Position.S }
 
     fun getKPPlayers() =
-            playerList.filter { it.position == Position.KP }
+            activePlayerList.filter { it.position == Position.KP }
+
+    fun getRetiredPlayers() = retiredPlayerList
 }

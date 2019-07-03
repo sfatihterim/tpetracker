@@ -1,5 +1,7 @@
 package com.nsfl.tpetracker.model.player
 
+import com.nsfl.tpetracker.model.position.Position
+import com.nsfl.tpetracker.model.team.Team
 import java.sql.DriverManager
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -7,7 +9,7 @@ import kotlin.collections.ArrayList
 
 class PlayerDatabase {
 
-    fun updatePlayers(parsedPlayerList: List<PlayerParser.ParsedPlayer>): ArrayList<Player> {
+    fun updateActivePlayers(parsedPlayerList: List<PlayerParser.ParsedPlayer>): ArrayList<ActivePlayer> {
 
         val saturday = SimpleDateFormat("MM/dd/yyyy").format(
                 Calendar.getInstance().apply {
@@ -26,19 +28,19 @@ class PlayerDatabase {
         connection.createStatement().execute("DELETE FROM players WHERE date='$saturday'")
         connection.createStatement().execute("INSERT INTO players VALUES %s;".format(values))
 
-        val playerList = ArrayList<Player>()
+        val activePlayerList = ArrayList<ActivePlayer>()
         parsedPlayerList.forEach { player ->
 
             val tpeHistoryList = ArrayList<Pair<String, Int>>()
             tpeHistoryList.add(Pair("", 50))
 
-            val ruleSet = connection.createStatement().executeQuery(
+            val resultSet = connection.createStatement().executeQuery(
                     "SELECT * FROM players WHERE player_id='${player.id}' ORDER BY id ASC"
             )
 
-            while (ruleSet.next()) {
+            while (resultSet.next()) {
                 tpeHistoryList.add(
-                        Pair(ruleSet.getString("date"), ruleSet.getInt("tpe"))
+                        Pair(resultSet.getString("date"), resultSet.getInt("tpe"))
                 )
             }
 
@@ -54,8 +56,8 @@ class PlayerDatabase {
                 }
             }
 
-            playerList.add(
-                    Player(
+            activePlayerList.add(
+                    ActivePlayer(
                             player.id,
                             player.user,
                             player.name,
@@ -94,7 +96,96 @@ class PlayerDatabase {
 
         connection.close()
 
-        return playerList
+        return activePlayerList
+    }
+
+    fun getRetiredPlayers(activePlayerList: ArrayList<ActivePlayer>): ArrayList<RetiredPlayer> {
+
+        val connection = getConnection()
+
+        val retiredPlayerIdList = ArrayList<String>()
+
+        val retiredPlayersResultSet = connection.createStatement().executeQuery(
+                "SELECT DISTINCT player_id FROM players WHERE " +
+                        activePlayerList.joinToString(" AND ") { "player_id != '${it.id}'" }
+        )
+
+        while (retiredPlayersResultSet.next()) {
+            retiredPlayerIdList.add(retiredPlayersResultSet.getString("player_id"))
+        }
+
+        val retiredPlayerList = ArrayList<RetiredPlayer>()
+
+        retiredPlayerIdList.forEach { playerId ->
+
+            var name: String? = null
+            var team: Team? = null
+            var position: Position? = null
+            var draftYear: String? = null
+            var currentTPE: Int? = null
+
+            val tpeHistoryList = ArrayList<Pair<String, Int>>()
+            tpeHistoryList.add(Pair("", 50))
+
+            val playerResultSet = connection.createStatement().executeQuery(
+                    "SELECT * FROM players WHERE player_id='$playerId' ORDER BY id ASC"
+            )
+
+            while (playerResultSet.next()) {
+
+                tpeHistoryList.add(
+                        Pair(playerResultSet.getString("date"), playerResultSet.getInt("tpe"))
+                )
+
+                if (playerResultSet.isLast) {
+                    name = playerResultSet.getString("name")
+                    team = Team.valueOf(playerResultSet.getString("team"))
+                    position = Position.valueOf(playerResultSet.getString("position"))
+                    draftYear = playerResultSet.getString("draft_year")
+                    currentTPE = playerResultSet.getString("tpe").toInt()
+                }
+            }
+
+            var lastUpdated = "-"
+            var i = tpeHistoryList.lastIndex
+
+            while (i > 0) {
+                if (tpeHistoryList[i].second != tpeHistoryList[i - 1].second) {
+                    lastUpdated = tpeHistoryList[i].first.substring(6) + "/" + tpeHistoryList[i].first.substring(0, 5)
+                    i = 0
+                } else {
+                    i--
+                }
+            }
+
+            retiredPlayerList.add(
+                    RetiredPlayer(
+                            playerId,
+                            playerId,
+                            name!!,
+                            team!!,
+                            position!!,
+                            draftYear!!,
+                            currentTPE!!,
+                            tpeHistoryList.maxBy { it.second }!!.second,
+                            lastUpdated,
+                            tpeHistoryList.mapIndexed { index, pair ->
+                                Pair(
+                                        if (index == 0) {
+                                            pair.first
+                                        } else {
+                                            pair.first.substring(0, 5)
+                                        },
+                                        pair.second
+                                )
+                            }
+                    )
+            )
+        }
+
+        connection.close()
+
+        return retiredPlayerList
     }
 
     private fun getConnection() = DriverManager.getConnection(System.getenv("JDBC_DATABASE_URL"))

@@ -9,7 +9,7 @@ import java.util.regex.Pattern
 
 class PlayerParser {
 
-    fun parseAll() = ArrayList<ParsedPlayer>().apply {
+    fun parseActivePlayers() = ArrayList<ParsedPlayer>().apply {
         Team.values().forEach { addAll(parsePlayers(it)) }
     }
 

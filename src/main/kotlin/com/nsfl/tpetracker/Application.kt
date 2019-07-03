@@ -286,6 +286,10 @@ class Application {
             playerRepository.getKPProspects()
     )
 
+    @RequestMapping("/retired_players")
+    fun getRetiredPlayers() =
+            htmlGenerator.createRetiredPlayersPage(playerRepository.getRetiredPlayers())
+
     @Controller
     class CustomErrorController : ErrorController {
         override fun getErrorPath() = "/error"
