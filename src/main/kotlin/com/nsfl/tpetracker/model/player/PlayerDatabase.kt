@@ -63,6 +63,8 @@ class PlayerDatabase {
                             player.position,
                             player.draftYear,
                             player.tpe,
+                            tpeHistoryList.maxBy { it.second }!!.second,
+                            lastUpdated,
                             tpeHistoryList.mapIndexed { index, pair ->
                                 Pair(
                                         if (index == 0) {
@@ -85,8 +87,7 @@ class PlayerDatabase {
                             player.runBlocking,
                             player.endurance,
                             player.kickPower,
-                            player.kickAccuracy,
-                            lastUpdated
+                            player.kickAccuracy
                     )
             )
         }

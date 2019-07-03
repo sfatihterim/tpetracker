@@ -10,7 +10,9 @@ class Player(
         val team: Team,
         val position: Position,
         val draftYear: String,
-        val tpe: Int,
+        val currentTPE: Int,
+        val highestTPE: Int,
+        val lastUpdated: String,
         val tpeHistoryList: List<Pair<String, Int>>,
         val strength: Int,
         val agility: Int,
@@ -24,6 +26,5 @@ class Player(
         val runBlocking: Int,
         val endurance: Int,
         val kickPower: Int,
-        val kickAccuracy: Int,
-        val lastUpdated: String
+        val kickAccuracy: Int
 )
