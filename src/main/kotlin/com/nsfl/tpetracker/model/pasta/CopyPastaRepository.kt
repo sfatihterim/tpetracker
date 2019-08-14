@@ -31,7 +31,9 @@ class CopyPastaRepository {
             "That's a \"Whoops\" moment",
             "I'm well aware of this.",
             "apology for poor english<br><br>where were you when leaf called up<br><br>I was in igloo drink secret stuff when BigRed ring<br><br>\"leaf is wraith\"<br><br>\"yes\"",
-            "I was walking down to the lake<br><br>Where I saw this guy on there<br><br>7 foot tall, full of muscle<br><br>He just smiled and gave me his secret stuff"
+            "I was walking down to the lake<br><br>Where I saw this guy on there<br><br>7 foot tall, full of muscle<br><br>He just smiled and gave me his secret stuff",
+            "How do you know a normal drink from Leaf-Cola?<br>It's rather simple, it's the tears of opposing QB's, after Leaf ended their careers.",
+            "I almost hit Ryan Leaf Jr. while riding my bike in downtown Yellowknife once. I was turning left off Grand, onto Province, right in front of the Burial Grounds and he had just gotten out of a white SUV, standing in what would be the bike lane. I slammed on my brakes, about to yell \"Hey douche! You don't look for bikes??,\" before realizing it was him. He looked at me with that smile... that fucking Ryan Leaf Jr. smile... and instantly my rage was gone. I don't really get star struck or anything, but it took a second to register that this was Ryan Leaf Jr. and he just stood there, smiling, and so I biked around him, and I was.. happy. It was so weird."
     )
 
     private val random = Random()
