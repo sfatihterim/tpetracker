@@ -1,5 +1,6 @@
 package com.nsfl.tpetracker
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import com.nsfl.tpetracker.html.HTMLGenerator
 import com.nsfl.tpetracker.model.pasta.CopyPastaRepository
 import com.nsfl.tpetracker.model.player.PlayerRepository
@@ -57,6 +58,9 @@ class Application {
 
     @RequestMapping("/last_update")
     fun getLastUpdateInformation() = lastUpdateInfo
+
+    @RequestMapping("/players_json")
+    fun getPlayersJson() = ObjectMapper().writeValueAsString(playerRepository.getAllPlayers())
 
     @RequestMapping("/error")
     fun getError(request: HttpServletRequest) = htmlGenerator.createErrorPage(
