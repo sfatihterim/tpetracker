@@ -60,7 +60,10 @@ class Application {
     fun getLastUpdateInformation() = lastUpdateInfo
 
     @RequestMapping("/players_json")
-    fun getPlayersJson() = ObjectMapper().writeValueAsString(playerRepository.getAllPlayers())
+    fun getActivePlayersJson() = ObjectMapper().writeValueAsString(playerRepository.getAllPlayers())
+
+    @RequestMapping("/retired_players_json")
+    fun getRetiredPlayersJson() = ObjectMapper().writeValueAsString(playerRepository.getRetiredPlayers())
 
     @RequestMapping("/error")
     fun getError(request: HttpServletRequest) = htmlGenerator.createErrorPage(
