@@ -60,7 +60,10 @@ class Application {
     fun getLastUpdateInformation() = lastUpdateInfo
 
     @RequestMapping("/players_json")
-    fun getActivePlayersJson() = ObjectMapper().writeValueAsString(playerRepository.getAllPlayers())
+    fun getActivePlayersJson(
+            @RequestParam(required = false, defaultValue = "${Int.MIN_VALUE}") gt: Int,
+            @RequestParam(required = false, defaultValue = "${Int.MAX_VALUE}") lt: Int
+    ) = ObjectMapper().writeValueAsString(playerRepository.getAllPlayers().filter { it.currentTPE in gt..lt })
 
     @RequestMapping("/retired_players_json")
     fun getRetiredPlayersJson() = ObjectMapper().writeValueAsString(playerRepository.getRetiredPlayers())
