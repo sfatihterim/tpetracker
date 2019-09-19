@@ -69,7 +69,13 @@ class Application {
     fun getRetiredPlayersJson() = ObjectMapper().writeValueAsString(playerRepository.getRetiredPlayers())
 
     @RequestMapping("/error")
-    fun getError(request: HttpServletRequest) = htmlGenerator.createErrorPage(
+    fun getNextCopyPasta(request: HttpServletRequest) = htmlGenerator.createErrorPage(
+            request.getAttribute(RequestDispatcher.ERROR_STATUS_CODE).toString(),
+            copyPastaRepository.getNextCopyPasta()
+    )
+
+    @RequestMapping("/random_pasta")
+    fun getRandomCopyPasta(request: HttpServletRequest) = htmlGenerator.createErrorPage(
             request.getAttribute(RequestDispatcher.ERROR_STATUS_CODE).toString(),
             copyPastaRepository.getRandomCopyPasta()
     )

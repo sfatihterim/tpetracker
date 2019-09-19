@@ -1,5 +1,7 @@
 package com.nsfl.tpetracker.model.pasta
 
+import java.util.*
+
 class CopyPastaRepository {
 
     private val copyPastaList = arrayListOf(
@@ -37,12 +39,16 @@ class CopyPastaRepository {
             "I'm tired of people hating on Baltimore's players!<br><br>Errol Maddox is LEGENDARY<br><br>Marquees Acho is RELENTLESS<br><br>Walt Green is a BALL HAWK<br><br>Dorfus Jimbo<br><br>Corvo Havran is CLUTCH"
     )
 
-    private var currentIndex = 0
+    private var nextIndex = 0
 
-    fun getRandomCopyPasta(): String {
-        val pasta = copyPastaList[currentIndex]
-        currentIndex++
-        currentIndex %= copyPastaList.size
+    fun getNextCopyPasta(): String {
+        val pasta = copyPastaList[nextIndex]
+        nextIndex++
+        nextIndex %= copyPastaList.size
         return pasta
     }
+
+    private val random = Random()
+
+    fun getRandomCopyPasta() = copyPastaList[random.nextInt(copyPastaList.size)]
 }
