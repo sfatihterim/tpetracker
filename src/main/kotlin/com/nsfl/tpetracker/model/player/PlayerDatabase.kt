@@ -130,7 +130,7 @@ class PlayerDatabase {
 
                 if (playerResultSet.isLast) {
                     name = playerResultSet.getString("name")
-                    team = Team.valueOf(playerResultSet.getString("team"))
+                    team = Team.fromName(playerResultSet.getString("team"))
                     position = Position.valueOf(playerResultSet.getString("position"))
                     draftYear = playerResultSet.getString("draft_year")
                     currentTPE = playerResultSet.getString("tpe").toInt()

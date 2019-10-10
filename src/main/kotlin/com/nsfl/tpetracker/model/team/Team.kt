@@ -16,7 +16,7 @@ enum class Team(
     NEW_ORLEANS_SECOND_LINE("113", "/new_orleans_second_line", "New Orleans Second Line", Type.NSFL),
     ORANGE_COUNTY_OTTERS("53", "/orange_county_otters", "Orange County Otters", Type.NSFL),
     SAN_JOSE_SABERCATS("51", "/san_jose_sabercats", "San Jose SaberCats", Type.NSFL),
-    PALM_BEACH_SOLAR_BEARS("160", "/palm_beach_solar_bears", "Palm Beach Solar Bears", Type.DSFL),
+    MYRTLE_BEACH_BUCCANEERS("160", "/myrtle_beach_buccaneers", "Myrtle Beach Buccaneers", Type.DSFL),
     KANSAS_CITY_COYOTES("158", "/kansas_city_coyotes", "Kansas City Coyotes", Type.DSFL),
     PORTLAND_PYTHONS("164", "/portland_pythons", "Portland Pythons", Type.DSFL),
     NORFOLK_SEAWOLVES("162", "/norfolk_seawolves", "Norfolk SeaWolves", Type.DSFL),
@@ -37,5 +37,15 @@ enum class Team(
 
     enum class Type {
         NSFL, DSFL, FREE_AGENT, PROSPECT
+    }
+
+    companion object {
+        fun fromName(name: String): Team {
+            return if (name == "PALM_BEACH_SOLAR_BEARS") {
+                MYRTLE_BEACH_BUCCANEERS
+            } else {
+                Team.valueOf(name)
+            }
+        }
     }
 }
