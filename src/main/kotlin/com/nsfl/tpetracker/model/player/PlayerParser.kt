@@ -5,9 +5,14 @@ import com.nsfl.tpetracker.model.position.Position
 import com.nsfl.tpetracker.model.team.Team
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
+import java.text.SimpleDateFormat
+import java.util.*
 import java.util.regex.Pattern
 
 class PlayerParser {
+
+    private val inputDateFormat = SimpleDateFormat("MMM dd yyyy, HH:mm a")
+    private val lastSeenDateFormat = SimpleDateFormat("yyyy/MM/dd")
 
     fun parseActivePlayers() = ArrayList<ParsedPlayer>().apply {
         Team.values().forEach { addAll(parsePlayers(it)) }
@@ -37,7 +42,9 @@ class PlayerParser {
                         }
                     }?.forEach { element ->
                         element.toString().let {
+
                             val playerInfo = parsePlayerInfo(it).split("?")
+
                             if (playerInfo.size == 3) {
 
                                 val playerId = parsePlayerID(it)
@@ -48,6 +55,9 @@ class PlayerParser {
 
                                 val user = playerPost.getElementsByClass("normalname").text()
                                 val attributes = playerPost.getElementsByClass("postcolor").toString()
+
+                                val profileId = parseProfileId(playerPost.getElementsByClass("normalname").toString())
+                                val playerProfile = connect("http://nsfl.jcink.net/index.php?showuser=$profileId")
 
                                 playerList.add(
                                         ParsedPlayer(
@@ -76,7 +86,8 @@ class PlayerParser {
                                                 parsePlayerAttribute(attributes, "run blocking:"),
                                                 parsePlayerAttribute(attributes, "endurance:"),
                                                 parsePlayerAttribute(attributes, "kick power:"),
-                                                parsePlayerAttribute(attributes, "kick accuracy:")
+                                                parsePlayerAttribute(attributes, "kick accuracy:"),
+                                                parseLastSeen(playerProfile.getElementById("profile-statistics").toString())
                                         )
                                 )
                             }
@@ -132,6 +143,12 @@ class PlayerParser {
         return elementString.substring(startIndex, endIndex)
     }
 
+    private fun parseProfileId(elementString: String): String {
+        val startIndex = elementString.indexOf("showuser=") + 9
+        val endIndex = elementString.indexOf("\"", startIndex)
+        return elementString.substring(startIndex, endIndex)
+    }
+
     private fun parsePlayerAttribute(post: String, attributeName: String): Int {
         return try {
 
@@ -157,6 +174,25 @@ class PlayerParser {
             attribute.toInt()
         } catch (exception: Exception) {
             -999
+        }
+    }
+
+    private fun parseLastSeen(elementString: String): String {
+
+        val startIndex = elementString.indexOf("Last Seen:") + 10
+        val endIndex = elementString.indexOf("\n", startIndex)
+        val lastSeenString = elementString.substring(startIndex, endIndex).trim()
+
+        return try {
+            lastSeenDateFormat.format(inputDateFormat.parse(lastSeenString))
+        } catch (exception: Exception) {
+            if (lastSeenString.startsWith("Yesterday")) {
+                lastSeenDateFormat.format(
+                        Calendar.getInstance().apply { add(Calendar.DAY_OF_YEAR, -1) }.timeInMillis
+                )
+            } else {
+                lastSeenDateFormat.format(Calendar.getInstance().timeInMillis)
+            }
         }
     }
 
@@ -190,6 +226,7 @@ class PlayerParser {
             val runBlocking: Int,
             val endurance: Int,
             val kickPower: Int,
-            val kickAccuracy: Int
+            val kickAccuracy: Int,
+            val lastSeen: String
     )
 }

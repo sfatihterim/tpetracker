@@ -26,5 +26,6 @@ class ActivePlayer(
         val runBlocking: Int,
         val endurance: Int,
         val kickPower: Int,
-        val kickAccuracy: Int
+        val kickAccuracy: Int,
+        val lastSeen: String
 ) : Player(id, user, name, team, position, draftYear, currentTPE, highestTPE, lastUpdated, tpeHistoryList)

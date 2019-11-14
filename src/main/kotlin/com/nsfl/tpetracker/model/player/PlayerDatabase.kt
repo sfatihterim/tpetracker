@@ -80,7 +80,8 @@ class PlayerDatabase {
                             player.runBlocking,
                             player.endurance,
                             player.kickPower,
-                            player.kickAccuracy
+                            player.kickAccuracy,
+                            player.lastSeen
                     )
             )
         }
