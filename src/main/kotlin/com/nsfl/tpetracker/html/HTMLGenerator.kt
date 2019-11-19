@@ -194,7 +194,7 @@ class HTMLGenerator {
             playerList.joinToString(",") {
                 "['<a href=\"http://nsfl.jcink.net/index.php?showtopic=${it.id}\">${it.user}</a>','${it.draftYear}','<a href=\"/player?playerId=${it.id}\">${it.name}</a>','${it.position.full}','${it.currentTPE}','${it.highestTPE}','${it.lastUpdated}','${it.lastSeen}','${it.strength}','${it.agility}','${it.arm}','${it.intelligence}','${it.throwingAccuracy}','${it.tackling}','${it.speed}','${it.hands}','${it.passBlocking}','${it.runBlocking}','${it.endurance}','${it.kickPower}','${it.kickAccuracy}']"
             },
-            team.full
+            "<a href=\"http://nsfl.jcink.net/index.php?showforum=${team.id}\">${team.full}</a>"
     )
 
     fun createRetiredPlayersPage(
