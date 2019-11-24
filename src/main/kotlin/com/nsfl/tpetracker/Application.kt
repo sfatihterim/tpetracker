@@ -112,7 +112,7 @@ class Application {
                     Pair(Team.KANSAS_CITY_COYOTES, playerRepository.getKansasCityCoyotesPlayers()),
                     Pair(Team.PORTLAND_PYTHONS, playerRepository.getPortlandPythonsPlayers()),
                     Pair(Team.NORFOLK_SEAWOLVES, playerRepository.getNorfolkSeawolvesPlayers()),
-                    Pair(Team.SAN_ANTONIO_MARSHALS, playerRepository.getSanAntonioMarshalsPlayers()),
+                    Pair(Team.MINNESOTA_GREY_DUCKS, playerRepository.getMinnesotaGreyDucksPlayers()),
                     Pair(Team.TIJUANA_LUCHADORES, playerRepository.getTijuanaLuchadoresPlayers())
             )
     )
@@ -225,10 +225,10 @@ class Application {
             playerRepository.getNorfolkSeawolvesPlayers()
     )
 
-    @RequestMapping("/san_antonio_marshals")
-    fun getSanAntonioMarshalsPlayers() = htmlGenerator.createTeamPage(
-            Team.SAN_ANTONIO_MARSHALS,
-            playerRepository.getSanAntonioMarshalsPlayers()
+    @RequestMapping("/minnesota_grey_ducks")
+    fun getMinnesotaGreyDucksPlayers() = htmlGenerator.createTeamPage(
+            Team.MINNESOTA_GREY_DUCKS,
+            playerRepository.getMinnesotaGreyDucksPlayers()
     )
 
     @RequestMapping("/tijuana_luchadores")

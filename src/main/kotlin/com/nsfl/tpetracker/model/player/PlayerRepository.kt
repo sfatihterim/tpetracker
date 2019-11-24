@@ -69,8 +69,8 @@ class PlayerRepository {
     fun getNorfolkSeawolvesPlayers() =
             activePlayerList.filter { it.team == Team.NORFOLK_SEAWOLVES }
 
-    fun getSanAntonioMarshalsPlayers() =
-            activePlayerList.filter { it.team == Team.SAN_ANTONIO_MARSHALS }
+    fun getMinnesotaGreyDucksPlayers() =
+            activePlayerList.filter { it.team == Team.MINNESOTA_GREY_DUCKS }
 
     fun getTijuanaLuchadoresPlayers() =
             activePlayerList.filter { it.team == Team.TIJUANA_LUCHADORES }
