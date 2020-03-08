@@ -75,6 +75,12 @@ class PlayerRepository {
     fun getTijuanaLuchadoresPlayers() =
             activePlayerList.filter { it.team == Team.TIJUANA_LUCHADORES }
 
+    fun getDallasBirddogsPlayers() =
+            activePlayerList.filter { it.team == Team.DALLAS_BIRDDOGS }
+
+    fun getLondonRoyalsPlayers() =
+            activePlayerList.filter { it.team == Team.LONDON_ROYALS }
+
     fun getFreeAgents() =
             activePlayerList.filter { it.team == Team.FREE_AGENTS }
 
