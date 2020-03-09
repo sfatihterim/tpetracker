@@ -113,7 +113,9 @@ class Application {
                     Pair(Team.PORTLAND_PYTHONS, playerRepository.getPortlandPythonsPlayers()),
                     Pair(Team.NORFOLK_SEAWOLVES, playerRepository.getNorfolkSeawolvesPlayers()),
                     Pair(Team.MINNESOTA_GREY_DUCKS, playerRepository.getMinnesotaGreyDucksPlayers()),
-                    Pair(Team.TIJUANA_LUCHADORES, playerRepository.getTijuanaLuchadoresPlayers())
+                    Pair(Team.TIJUANA_LUCHADORES, playerRepository.getTijuanaLuchadoresPlayers()),
+                    Pair(Team.DALLAS_BIRDDOGS, playerRepository.getDallasBirddogsPlayers()),
+                    Pair(Team.LONDON_ROYALS, playerRepository.getLondonRoyalsPlayers())
             )
     )
 
@@ -235,6 +237,18 @@ class Application {
     fun getTijuanaLuchadoresPlayers() = htmlGenerator.createTeamPage(
             Team.TIJUANA_LUCHADORES,
             playerRepository.getTijuanaLuchadoresPlayers()
+    )
+	
+    @RequestMapping("/dallas_birddogs")
+    fun getDallasBirddogsPlayers() = htmlGenerator.createTeamPage(
+            Team.DALLAS_BIRDDOGS,
+            playerRepository.getDallasBirddogsPlayers()
+    )
+	
+    @RequestMapping("/london_royals")
+    fun getLondonRoyalsPlayers() = htmlGenerator.createTeamPage(
+            Team.LONDON_ROYALS,
+            playerRepository.getLondonRoyalsPlayers()
     )
 
     @RequestMapping("/free_agents")
