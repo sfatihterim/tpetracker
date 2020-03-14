@@ -111,6 +111,7 @@ class PlayerDatabase {
         retiredPlayerIdList.forEach { playerId ->
 
             var name: String? = null
+            var user: String? = null
             var team: Team? = null
             var position: Position? = null
             var draftYear: String? = null
@@ -131,6 +132,7 @@ class PlayerDatabase {
 
                 if (playerResultSet.isLast) {
                     name = playerResultSet.getString("name")
+                    user = playerResultSet.getString("user")
                     team = Team.fromName(playerResultSet.getString("team"))
                     position = Position.valueOf(playerResultSet.getString("position"))
                     draftYear = playerResultSet.getString("draft_year")
@@ -153,7 +155,7 @@ class PlayerDatabase {
             retiredPlayerList.add(
                     RetiredPlayer(
                             playerId,
-                            playerId,
+                            user,
                             name!!,
                             team!!,
                             position!!,
