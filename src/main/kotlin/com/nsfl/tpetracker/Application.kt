@@ -238,13 +238,13 @@ class Application {
             Team.TIJUANA_LUCHADORES,
             playerRepository.getTijuanaLuchadoresPlayers()
     )
-	
+
     @RequestMapping("/dallas_birddogs")
     fun getDallasBirddogsPlayers() = htmlGenerator.createTeamPage(
             Team.DALLAS_BIRDDOGS,
             playerRepository.getDallasBirddogsPlayers()
     )
-	
+
     @RequestMapping("/london_royals")
     fun getLondonRoyalsPlayers() = htmlGenerator.createTeamPage(
             Team.LONDON_ROYALS,
