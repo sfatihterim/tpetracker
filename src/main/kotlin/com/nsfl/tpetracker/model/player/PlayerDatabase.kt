@@ -124,6 +124,8 @@ class PlayerDatabase {
                     "SELECT * FROM players WHERE player_id='$playerId' ORDER BY id ASC"
             )
 
+            user = PlayerParser().parseUserName(playerId)
+
             while (playerResultSet.next()) {
 
                 tpeHistoryList.add(
@@ -132,7 +134,6 @@ class PlayerDatabase {
 
                 if (playerResultSet.isLast) {
                     name = playerResultSet.getString("name")
-                    user = playerResultSet.getString("user")
                     team = Team.fromName(playerResultSet.getString("team"))
                     position = Position.valueOf(playerResultSet.getString("position"))
                     draftYear = playerResultSet.getString("draft_year")
@@ -155,7 +156,7 @@ class PlayerDatabase {
             retiredPlayerList.add(
                     RetiredPlayer(
                             playerId,
-                            user,
+                            user!!,
                             name!!,
                             team!!,
                             position!!,
