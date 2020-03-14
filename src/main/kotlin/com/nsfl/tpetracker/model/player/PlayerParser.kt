@@ -144,12 +144,17 @@ class PlayerParser {
     }
 
     fun parseUserName(playerID: String): String{
-      val user = connect("http://nsfl.jcink.net/index.php?showtopic=$playerID")
+      try {
+        val user = connect("http://nsfl.jcink.net/index.php?showtopic=$playerID")
               .body()
               .getElementsByClass("post-normal")[0]
               .getElementsByClass("normalname")
               .text()
-      return user
+        return user
+      } catch (exception: Exception) {
+        val user = ""
+        return user
+      }
     }
 
     private fun parseProfileId(elementString: String): String {
