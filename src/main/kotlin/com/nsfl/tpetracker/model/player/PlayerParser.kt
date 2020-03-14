@@ -150,7 +150,7 @@ class PlayerParser {
               .getElementsByClass("post-normal")[0]
               .getElementsByClass("normalname")
               .text()
-        return user
+        return user.replace("'", "’")
       } catch (exception: Exception) {
         return "-"
       }
