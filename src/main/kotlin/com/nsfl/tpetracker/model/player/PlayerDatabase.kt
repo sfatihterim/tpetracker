@@ -111,7 +111,6 @@ class PlayerDatabase {
         retiredPlayerIdList.forEach { playerId ->
 
             var name: String? = null
-            var user: String? = null
             var team: Team? = null
             var position: Position? = null
             var draftYear: String? = null
@@ -124,7 +123,7 @@ class PlayerDatabase {
                     "SELECT * FROM players WHERE player_id='$playerId' ORDER BY id ASC"
             )
 
-            user = PlayerParser().parseUserName(playerId)
+            var user = PlayerParser().parseUserName(playerId)
 
             while (playerResultSet.next()) {
 
@@ -156,7 +155,7 @@ class PlayerDatabase {
             retiredPlayerList.add(
                     RetiredPlayer(
                             playerId,
-                            user!!,
+                            user,
                             name!!,
                             team!!,
                             position!!,

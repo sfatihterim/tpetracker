@@ -152,8 +152,7 @@ class PlayerParser {
               .text()
         return user
       } catch (exception: Exception) {
-        val user = ""
-        return user
+        return "-"
       }
     }
 
