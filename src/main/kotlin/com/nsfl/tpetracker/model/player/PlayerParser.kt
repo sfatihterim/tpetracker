@@ -143,6 +143,19 @@ class PlayerParser {
         return elementString.substring(startIndex, endIndex)
     }
 
+    fun parseUserName(playerID: String): String{
+      try {
+        val user = connect("http://nsfl.jcink.net/index.php?showtopic=$playerID")
+              .body()
+              .getElementsByClass("post-normal")[0]
+              .getElementsByClass("normalname")
+              .text()
+        return user.replace("'", "’")
+      } catch (exception: Exception) {
+        return "-"
+      }
+    }
+
     private fun parseProfileId(elementString: String): String {
         val startIndex = elementString.indexOf("showuser=") + 9
         val endIndex = elementString.indexOf("\"", startIndex)

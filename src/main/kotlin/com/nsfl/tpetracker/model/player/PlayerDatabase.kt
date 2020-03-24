@@ -123,6 +123,8 @@ class PlayerDatabase {
                     "SELECT * FROM players WHERE player_id='$playerId' ORDER BY id ASC"
             )
 
+            var user = PlayerParser().parseUserName(playerId)
+
             while (playerResultSet.next()) {
 
                 tpeHistoryList.add(
@@ -153,7 +155,7 @@ class PlayerDatabase {
             retiredPlayerList.add(
                     RetiredPlayer(
                             playerId,
-                            playerId,
+                            user,
                             name!!,
                             team!!,
                             position!!,
