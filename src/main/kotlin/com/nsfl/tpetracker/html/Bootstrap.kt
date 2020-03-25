@@ -76,6 +76,17 @@ fun UL.navItem(href: String, active: Boolean = false, block: A.() -> Unit) {
     }
 }
 
+fun UL.navItemDropdown(name: String, active: Boolean = false, block: DIV.() -> Unit) {
+    li(classes = if (active) "nav-item active" else "nav-item") {
+        a(classes = "nav-link dropdown-toggle") { +name }
+        div(classes = "dropdown-menu", block = block)
+    }
+}
+
+fun DIV.dropdownItem(href: String, active: Boolean = false, block: A.() -> Unit) {
+    a(href = href, classes = if (active) "dropdown-item active" else "dropdown-item", block = block)
+}
+
 @Suppress("unused")
 open class CARD(initialAttributes: Map<String, String>, override val consumer: TagConsumer<*>) :
         DIV(initialAttributes, consumer) {}

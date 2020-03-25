@@ -6,6 +6,7 @@ import com.nsfl.tpetracker.model.player.RetiredPlayer
 import com.nsfl.tpetracker.model.position.Position
 import com.nsfl.tpetracker.model.team.Team
 import kotlinx.html.TagConsumer
+import kotlinx.html.html
 import kotlinx.html.stream.appendHTML
 import java.text.SimpleDateFormat
 import java.util.*
@@ -27,15 +28,23 @@ class HTMLGenerator {
     private val inputDateFormat = SimpleDateFormat("yyyy-MM-dd")
     private val playerDateFormat = SimpleDateFormat("MM/dd/yyyy")
 
-    fun createIndexPage(): String = buildString { appendHTML().indexView() }
-
-    fun createAllPlayersPage(
-            playerList: List<ActivePlayer>
-    ) = ALL_PLAYERS_HTML.format(
-            playerList.joinToString(",") {
-                "['<a href=\"http://nsfl.jcink.net/index.php?showtopic=${it.id}\">${it.user}</a>','${it.draftYear}','<a href=\"${it.team.url}\">${it.team.full}</a>','<a href=\"/player?playerId=${it.id}\">${it.name}</a>','${it.position.full}','${it.currentTPE}','${it.highestTPE}','${it.lastUpdated}','${it.lastSeen}','${it.strength}','${it.agility}','${it.arm}','${it.intelligence}','${it.throwingAccuracy}','${it.tackling}','${it.speed}','${it.hands}','${it.passBlocking}','${it.runBlocking}','${it.endurance}','${it.kickPower}','${it.kickAccuracy}']"
+    fun createIndexPage(): String = buildString {
+        appendHTML().apply {
+            html {
+                indexView()
             }
-    )
+        }
+    }
+
+    fun createAllPlayersPage(playerList: List<ActivePlayer>) = buildString {
+        appendHTML().apply {
+            html {
+                navbarTemplate("All Players") {
+                    allPlayersView(playerList)
+                }
+            }
+        }
+    }
 
     fun createPlayerPage(
             player: Player
