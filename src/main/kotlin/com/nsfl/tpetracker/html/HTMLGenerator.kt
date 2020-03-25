@@ -5,6 +5,8 @@ import com.nsfl.tpetracker.model.player.Player
 import com.nsfl.tpetracker.model.player.RetiredPlayer
 import com.nsfl.tpetracker.model.position.Position
 import com.nsfl.tpetracker.model.team.Team
+import kotlinx.html.TagConsumer
+import kotlinx.html.stream.appendHTML
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
@@ -25,7 +27,7 @@ class HTMLGenerator {
     private val inputDateFormat = SimpleDateFormat("yyyy-MM-dd")
     private val playerDateFormat = SimpleDateFormat("MM/dd/yyyy")
 
-    fun createIndexPage() = INDEX_HTML
+    fun createIndexPage(): String = buildString { appendHTML().indexView() }
 
     fun createAllPlayersPage(
             playerList: List<ActivePlayer>
