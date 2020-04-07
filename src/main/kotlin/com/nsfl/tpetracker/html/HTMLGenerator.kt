@@ -46,26 +46,15 @@ class HTMLGenerator {
         }
     }
 
-    fun createPlayerPage(
-            player: Player
-    ) = INDIVIDUAL_PLAYER_HTML.format(
-            player.name,
-            "http://nsfl.jcink.net/index.php?showtopic=${player.id}",
-            player.name,
-            player.team.url,
-            player.team.full,
-            "${player.position.full} - ${player.draftYear}",
-            player.tpeHistoryList.joinToString(",") {
-                if (it.first.isEmpty()) {
-                    "'${it.first}'"
-                } else {
-                    "'${it.first.substring(0, 5)}'"
+    fun createPlayerPage(player: Player) = buildString {
+        appendHTML().apply {
+            html {
+                navbarTemplate(player.name) {
+                    individualPlayerView(player)
                 }
-            },
-            player.tpeHistoryList.joinToString(",") {
-                "'${it.second}'"
             }
-    )
+        }
+    }
 
     fun createTeamStatsPage(
             nsflList: List<Pair<Team, List<ActivePlayer>>>,

@@ -19,6 +19,7 @@ fun HTML.navbarTemplate(title: String, contents: DIV.() -> Unit) {
         script(src = "https://cdn.datatables.net/buttons/1.5.6/js/buttons.colVis.min.js") {}
         script(src = "https://cdn.datatables.net/plug-ins/1.10.19/sorting/enum.js") {}
         script(src = "https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.bundle.min.js") {}
+        script(src = "https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js") {}
 
         link(href = "/static/css/main.css", rel = "stylesheet")
     }
