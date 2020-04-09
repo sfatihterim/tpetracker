@@ -58,9 +58,6 @@ class Application {
 
     @RequestMapping("/last_update")
     fun getLastUpdateInformation(): String {
-        Thread {
-            updatePlayers("Manual")
-        }.start()
         return lastUpdateInfo
     }
 

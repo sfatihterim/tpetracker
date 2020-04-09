@@ -22,10 +22,6 @@ fun DIV.allPlayersView(allPlayers: List<ActivePlayer>) {
         }
     }
 
-    script(src = "/static/js/all-players-table-generator.js") {
-        defer = true
-    }
-
     script {
         unsafe {
             +"var dataSet = "
@@ -59,4 +55,6 @@ fun DIV.allPlayersView(allPlayers: List<ActivePlayer>) {
             }.toJsonString()
         }
     }
+
+    script(src = "/static/js/all-players-table-generator.js") {}
 }
