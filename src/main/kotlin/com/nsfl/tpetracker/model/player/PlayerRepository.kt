@@ -21,6 +21,11 @@ class PlayerRepository {
         retiredPlayerList.addAll(newRetiredPlayerList)
     }
 
+    fun initialise(){
+        val newActivePlayerList = playerDatabase.initaliseAllPlayers()
+        activePlayerList.addAll(newActivePlayerList)
+    }
+
     fun getPlayer(playerId: String) =
             activePlayerList.firstOrNull { it.id == playerId }
                     ?: retiredPlayerList.first { it.id == playerId }

@@ -31,6 +31,7 @@ class Application {
 
     init {
         Thread {
+            playerRepository.initialise()
             updatePlayers("Initial")
         }.start()
     }
