@@ -77,8 +77,11 @@ fun UL.navItem(href: String, active: Boolean = false, block: A.() -> Unit) {
 }
 
 fun UL.navItemDropdown(name: String, active: Boolean = false, block: DIV.() -> Unit) {
-    li(classes = if (active) "nav-item active" else "nav-item") {
-        a(classes = "nav-link dropdown-toggle") { +name }
+    li(classes = if (active) "nav-item dropdown active" else "nav-item dropdown") {
+        a(classes = "nav-link dropdown-toggle", href="#") {
+            attributes["data-toggle"] = "dropdown"
+            +name
+        }
         div(classes = "dropdown-menu", block = block)
     }
 }
