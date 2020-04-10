@@ -51,9 +51,11 @@ fun HTML.navbarTemplate(title: String, contents: DIV.() -> Unit) {
                         dropdownItem(href = "/chicago_butchers") { +"Chicago Butchers" }
                         dropdownItem(href = "/colorado_yeti") { +"Colorado Yeti" }
                         dropdownItem(href = "/philadelphia_liberty") { +"Philadelphia Liberty" }
+                        dropdownItem(href = "/sarasota_sailfish") { +"Sarasota Sailfish" }
                         dropdownItem(href = "/yellowknife_wraiths") { +"Yellowknife Wraiths" }
                         dropdownItem(href = "/arizona_outlaws") { +"Arizona Outlaws" }
                         dropdownItem(href = "/austin_copperheads") { +"Austin Copperheads" }
+                        dropdownItem(href = "/honolulu_hahalua") { +"Honolulu Hahalua" }
                         dropdownItem(href = "/new_orleans_second_line") { +"New Orleans Second Line" }
                         dropdownItem(href = "/orange_county_otters") { +"Orange County Otters" }
                         dropdownItem(href = "/san_jose_sabercats") { +"San Jose SaberCats" }
