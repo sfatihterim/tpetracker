@@ -35,7 +35,7 @@ fun HTML.indexView() {
                 pageItem(url = "/all_players", name = "All Players", wide = true)
                 pageItem(url = "/team_stats", name = "Team Stats", wide = true)
                 pageItem(url = "/position_stats", name = "Position Stats", wide = true)
-                pageItem(url = "/activity_check", name = "Activity Check", wide = true)
+                pageItem(url = "/activity_check_query", name = "Activity Check", wide = true)
             }
         }
 
