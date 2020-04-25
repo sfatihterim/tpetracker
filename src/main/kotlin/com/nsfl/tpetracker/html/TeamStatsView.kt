@@ -44,8 +44,8 @@ fun DIV.teamStatsView(nsflList: List<Pair<Team, List<ActivePlayer>>>, dsflList: 
                             "<a href=\"${pair.first.url}\">${pair.first.full}</a>",
                             "${pair.second.getTotalTPE()}",
                             "${pair.second.getAverageTPE()}",
-                            "${pair.second.getTotalTPE()}",
-                            "${pair.second.getAverageTPE()}",
+                            "${pair.second.getTotalEffectiveTPE()}",
+                            "${pair.second.getAverageEffectiveTPE()}",
                             "${pair.second.getOffensiveTPE(true)}",
                             "${pair.second.getDefensiveTPE(true)}"
                     )
