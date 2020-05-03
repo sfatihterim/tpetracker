@@ -31,6 +31,7 @@ class Application {
 
     init {
         Thread {
+            playerRepository.initialise()
             updatePlayers("Initial")
         }.start()
     }
@@ -57,7 +58,9 @@ class Application {
     }
 
     @RequestMapping("/last_update")
-    fun getLastUpdateInformation() = lastUpdateInfo
+    fun getLastUpdateInformation(): String {
+        return lastUpdateInfo
+    }
 
     @RequestMapping("/players_json")
     fun getActivePlayersJson(
@@ -100,9 +103,11 @@ class Application {
                     Pair(Team.CHICAGO_BUTCHERS, playerRepository.getChicagoButchersPlayers()),
                     Pair(Team.COLORADO_YETI, playerRepository.getColoradoYetiPlayers()),
                     Pair(Team.PHILADELPHIA_LIBERTY, playerRepository.getPhiladelphiaLibertyPlayers()),
+                    Pair(Team.SARASOTA_SAILFISH, playerRepository.getSarasotaSailfishPlayers()),
                     Pair(Team.YELLOWKNIFE_WRAITHS, playerRepository.getYellowknifeWraithsPlayers()),
                     Pair(Team.ARIZONA_OUTLAWS, playerRepository.getArizonaOutlawsPlayers()),
                     Pair(Team.AUSTIN_COPPERHEADS, playerRepository.getAustinCopperheadsPlayers()),
+                    Pair(Team.HONOLULU_HAHALUA, playerRepository.getHonoluluHahaluaPlayers()),
                     Pair(Team.NEW_ORLEANS_SECOND_LINE, playerRepository.getNewOrleansSecondLinePlayers()),
                     Pair(Team.ORANGE_COUNTY_OTTERS, playerRepository.getOrangeCountyOttersPlayers()),
                     Pair(Team.SAN_JOSE_SABERCATS, playerRepository.getSanJoseSabercatsPlayers())
@@ -201,6 +206,18 @@ class Application {
     fun getSanJoseSaberCatsPlayers() = htmlGenerator.createTeamPage(
             Team.SAN_JOSE_SABERCATS,
             playerRepository.getSanJoseSabercatsPlayers()
+    )
+
+    @RequestMapping("/honolulu_hahalua")
+    fun getHonoluluHahaluaPlayers() = htmlGenerator.createTeamPage(
+            Team.HONOLULU_HAHALUA,
+            playerRepository.getHonoluluHahaluaPlayers()
+    )
+
+    @RequestMapping("/sarasota_sailfish")
+    fun getSarasotaSailfishPlayers() = htmlGenerator.createTeamPage(
+            Team.SARASOTA_SAILFISH,
+            playerRepository.getSarasotaSailfishPlayers()
     )
 
     @RequestMapping("/myrtle_beach_buccaneers")

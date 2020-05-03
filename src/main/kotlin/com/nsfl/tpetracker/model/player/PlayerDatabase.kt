@@ -182,5 +182,107 @@ class PlayerDatabase {
         return retiredPlayerList
     }
 
+    fun initaliseAllPlayers(): ArrayList<ActivePlayer> {
+
+        val connection = getConnection()
+
+        val playerIdList = ArrayList<String>()
+
+        val playersResultSet = connection.createStatement().executeQuery(
+                "SELECT DISTINCT player_id FROM players"
+        )
+
+        while (playersResultSet.next()) {
+            playerIdList.add(playersResultSet.getString("player_id"))
+        }
+
+        val playerList = ArrayList<ActivePlayer>()
+
+        playerIdList.forEach { playerId ->
+
+            var name: String? = null
+            var team: Team? = null
+            var position: Position? = null
+            var draftYear: String? = null
+            var currentTPE: Int? = null
+
+            val tpeHistoryList = ArrayList<Pair<String, Int>>()
+            tpeHistoryList.add(Pair("", 50))
+
+            val playerResultSet = connection.createStatement().executeQuery(
+                    "SELECT * FROM players WHERE player_id='$playerId' ORDER BY id ASC"
+            )
+
+            while (playerResultSet.next()) {
+
+                tpeHistoryList.add(
+                        Pair(playerResultSet.getString("date"), playerResultSet.getInt("tpe"))
+                )
+
+                if (playerResultSet.isLast) {
+                    name = playerResultSet.getString("name")
+                    team = Team.fromName(playerResultSet.getString("team"))
+                    position = Position.valueOf(playerResultSet.getString("position"))
+                    draftYear = playerResultSet.getString("draft_year")
+                    currentTPE = playerResultSet.getString("tpe").toInt()
+                }
+            }
+
+            var lastUpdated = "-"
+            var i = tpeHistoryList.lastIndex
+
+            while (i > 0) {
+                if (tpeHistoryList[i].second != tpeHistoryList[i - 1].second) {
+                    lastUpdated = tpeHistoryList[i].first.substring(6) + "/" + tpeHistoryList[i].first.substring(0, 5)
+                    i = 0
+                } else {
+                    i--
+                }
+            }
+
+            playerList.add(
+                    ActivePlayer(
+                            playerId,
+                            playerId,
+                            name!!,
+                            team!!,
+                            position!!,
+                            draftYear!!,
+                            currentTPE!!,
+                            tpeHistoryList.maxBy { it.second }!!.second,
+                            lastUpdated,
+                            tpeHistoryList.mapIndexed { index, pair ->
+                                Pair(
+                                        if (index == 0) {
+                                            pair.first
+                                        } else {
+                                            pair.first.substring(0, 5)
+                                        },
+                                        pair.second
+                                )
+                            },
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            "0"
+                    )
+            )
+        }
+
+        connection.close()
+
+        return playerList
+    }
+
     private fun getConnection() = DriverManager.getConnection(System.getenv("JDBC_DATABASE_URL"))
 }

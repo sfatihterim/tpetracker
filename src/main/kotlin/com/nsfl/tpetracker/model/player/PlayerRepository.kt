@@ -21,6 +21,11 @@ class PlayerRepository {
         retiredPlayerList.addAll(newRetiredPlayerList)
     }
 
+    fun initialise(){
+        val newActivePlayerList = playerDatabase.initaliseAllPlayers()
+        activePlayerList.addAll(newActivePlayerList)
+    }
+
     fun getPlayer(playerId: String) =
             activePlayerList.firstOrNull { it.id == playerId }
                     ?: retiredPlayerList.first { it.id == playerId }
@@ -56,6 +61,12 @@ class PlayerRepository {
 
     fun getSanJoseSabercatsPlayers() =
             activePlayerList.filter { it.team == Team.SAN_JOSE_SABERCATS }
+
+    fun getSarasotaSailfishPlayers() =
+            activePlayerList.filter { it.team == Team.SARASOTA_SAILFISH }
+
+    fun getHonoluluHahaluaPlayers() =
+            activePlayerList.filter { it.team == Team.HONOLULU_HAHALUA }
 
     fun getMyrtleBeachBuccaneersPlayers() =
             activePlayerList.filter { it.team == Team.MYRTLE_BEACH_BUCCANEERS }
