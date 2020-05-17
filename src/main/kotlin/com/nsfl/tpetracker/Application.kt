@@ -9,6 +9,7 @@ import com.nsfl.tpetracker.model.team.Team
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 import org.springframework.boot.web.servlet.error.ErrorController
+import org.springframework.http.MediaType
 import org.springframework.scheduling.annotation.EnableScheduling
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Controller
@@ -62,7 +63,7 @@ class Application {
         return lastUpdateInfo
     }
 
-    @RequestMapping("/players_json")
+    @RequestMapping("/players_json", produces = arrayOf(MediaType.APPLICATION_JSON_VALUE))
     fun getActivePlayersJson(
             @RequestParam(required = false, defaultValue = "${Int.MIN_VALUE}") gt: Int,
             @RequestParam(required = false, defaultValue = "${Int.MAX_VALUE}") lt: Int
