@@ -66,19 +66,15 @@ class HTMLGenerator {
         }
     }
 
-    fun createPositionStatsPage(
-            positionList: List<Pair<Position, List<ActivePlayer>>>
-    ) = POSITION_STATS_HTML.format(
-            positionList.joinToString(",") { pair ->
-                val nsflList = pair.second.filter { it.team.type == Team.Type.NSFL }
-                val dsflList = pair.second.filter { it.team.type == Team.Type.DSFL }
-                val freeAgentList = pair.second.filter { it.team.type == Team.Type.FREE_AGENT }
-                val prospectList = pair.second.filter { it.team.type == Team.Type.PROSPECT }
-                "['${pair.first.full}','${nsflList.size}','${dsflList.size}','${freeAgentList.size}','${prospectList.size}','${pair.second.size}'" +
-                        ",'${nsflList.minBy(0) { it.currentTPE }}','${nsflList.maxBy(0) { it.currentTPE }}','${nsflList.sumBy { it.currentTPE } / nsflList.countOrOne()}'" +
-                        ",'${dsflList.minBy(0) { it.currentTPE }}','${dsflList.maxBy(0) { it.currentTPE }}','${dsflList.sumBy { it.currentTPE } / dsflList.countOrOne()}']"
+    fun createPositionStatsPage(positionList: List<Pair<Position, List<ActivePlayer>>>) = buildString {
+        appendHTML().apply {
+            html {
+                navbarTemplate("Position Stats") {
+                    positionStatsView(positionList)
+                }
             }
-    )
+        }
+    }
 
     fun createActivityCheckQueryPage() = ACTIVITY_CHECK_QUERY_HTML
 
@@ -205,23 +201,5 @@ class HTMLGenerator {
     )
 
     fun createErrorPage(error: String, copyPasta: String) = ERROR_HTML.format(error, copyPasta)
-
-    private fun <T, R : Comparable<R>> Iterable<T>.minBy(default: R, selector: (T) -> R): R {
-        val min = minBy { selector.invoke(it) }
-        return if (min == null) {
-            default
-        } else {
-            selector(min)
-        }
-    }
-
-    private fun <T, R : Comparable<R>> Iterable<T>.maxBy(default: R, selector: (T) -> R): R {
-        val max = maxBy { selector.invoke(it) }
-        return if (max == null) {
-            default
-        } else {
-            selector(max)
-        }
-    }
 
 }

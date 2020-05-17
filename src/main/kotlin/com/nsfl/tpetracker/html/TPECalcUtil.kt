@@ -60,3 +60,21 @@ private fun getPlayerTPESafe(playerList: List<Player>, index: Int, dsfl: Boolean
 }
 
 fun <T> Iterable<T>.countOrOne() = count().let { if (it == 0) 1 else it }
+
+fun <T, R : Comparable<R>> Iterable<T>.minBy(default: R, selector: (T) -> R): R {
+    val min = minBy { selector.invoke(it) }
+    return if (min == null) {
+        default
+    } else {
+        selector(min)
+    }
+}
+
+fun <T, R : Comparable<R>> Iterable<T>.maxBy(default: R, selector: (T) -> R): R {
+    val max = maxBy { selector.invoke(it) }
+    return if (max == null) {
+        default
+    } else {
+        selector(max)
+    }
+}
