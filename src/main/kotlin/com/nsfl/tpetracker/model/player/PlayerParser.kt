@@ -96,6 +96,7 @@ class PlayerParser {
                             }
                         }
                     }
+                  }
         }
 
         return playerList
