@@ -49,47 +49,50 @@ class PlayerParser {
 
                                 val playerId = parsePlayerID(it)
 
-                                val playerPost = connect("http://nsfl.jcink.net/index.php?showtopic=$playerId")
-                                        .body()
-                                        .getElementsByClass("post-normal")[0]
+                                val playerPostDoc = connect("http://nsfl.jcink.net/index.php?showtopic=$playerId")
 
-                                val user = playerPost.getElementsByClass("normalname").text()
-                                val attributes = playerPost.getElementsByClass("postcolor").toString()
+                                try {
+                                    val playerPost = playerPostDoc.body().getElementsByClass("post-normal")[0]
 
-                                val profileId = parseProfileId(playerPost.getElementsByClass("normalname").toString())
-                                val playerProfile = connect("http://nsfl.jcink.net/index.php?showuser=$profileId")
+                                    val user = playerPost.getElementsByClass("normalname").text()
+                                    val attributes = playerPost.getElementsByClass("postcolor").toString()
 
-                                playerList.add(
-                                        ParsedPlayer(
-                                                playerId,
-                                                user.replace("'", "’"),
-                                                playerInfo[1].trim(),
-                                                team,
-                                                Position.fromAbbreviation(playerInfo[2].trim()),
-                                                playerInfo[0].trim().let { info ->
-                                                    if (info.length == 2) {
-                                                        "S0${info.substring(1)}"
-                                                    } else {
-                                                        info
-                                                    }
-                                                },
-                                                parsePlayerTPE(it),
-                                                parsePlayerAttribute(attributes, "strength:"),
-                                                parsePlayerAttribute(attributes, "agility:"),
-                                                parsePlayerAttribute(attributes, "arm:"),
-                                                parsePlayerAttribute(attributes, "intelligence:"),
-                                                parsePlayerAttribute(attributes, "throwing accuracy:"),
-                                                parsePlayerAttribute(attributes, "tackling:"),
-                                                parsePlayerAttribute(attributes, "speed:"),
-                                                parsePlayerAttribute(attributes, "hands:"),
-                                                parsePlayerAttribute(attributes, "pass blocking:"),
-                                                parsePlayerAttribute(attributes, "run blocking:"),
-                                                parsePlayerAttribute(attributes, "endurance:"),
-                                                parsePlayerAttribute(attributes, "kick power:"),
-                                                parsePlayerAttribute(attributes, "kick accuracy:"),
-                                                parseLastSeen(playerProfile.getElementById("profile-statistics").toString())
-                                        )
-                                )
+                                    val profileId = parseProfileId(playerPost.getElementsByClass("normalname").toString())
+                                    val playerProfile = connect("http://nsfl.jcink.net/index.php?showuser=$profileId")
+
+                                    playerList.add(
+                                            ParsedPlayer(
+                                                    playerId,
+                                                    user.replace("'", "’"),
+                                                    playerInfo[1].trim(),
+                                                    team,
+                                                    Position.fromAbbreviation(playerInfo[2].trim()),
+                                                    playerInfo[0].trim().let { info ->
+                                                        if (info.length == 2) {
+                                                            "S0${info.substring(1)}"
+                                                        } else {
+                                                            info
+                                                        }
+                                                    },
+                                                    parsePlayerTPE(it),
+                                                    parsePlayerAttribute(attributes, "strength:"),
+                                                    parsePlayerAttribute(attributes, "agility:"),
+                                                    parsePlayerAttribute(attributes, "arm:"),
+                                                    parsePlayerAttribute(attributes, "intelligence:"),
+                                                    parsePlayerAttribute(attributes, "throwing accuracy:"),
+                                                    parsePlayerAttribute(attributes, "tackling:"),
+                                                    parsePlayerAttribute(attributes, "speed:"),
+                                                    parsePlayerAttribute(attributes, "hands:"),
+                                                    parsePlayerAttribute(attributes, "pass blocking:"),
+                                                    parsePlayerAttribute(attributes, "run blocking:"),
+                                                    parsePlayerAttribute(attributes, "endurance:"),
+                                                    parsePlayerAttribute(attributes, "kick power:"),
+                                                    parsePlayerAttribute(attributes, "kick accuracy:"),
+                                                    parseLastSeen(playerProfile.getElementById("profile-statistics").toString())
+                                            )
+                                    )
+                            } catch (exception: Exception) {
+                                Logger.error("Issue parsing player with Player ID: $playerId ! $exception")
                             }
                         }
                     }
