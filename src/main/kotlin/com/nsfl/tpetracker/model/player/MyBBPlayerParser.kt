@@ -24,14 +24,14 @@ class MyBBPlayerParser {
         val playerList = ArrayList<PlayerParser.ParsedPlayer>()
         val documentList = ArrayList<Document>()
 
-        val firstDocument = connect("http://localhost/mybb/forumdisplay.php?fid=${team.id}")
+        val firstDocument = connect("https://forums.sim-football.com/forumdisplay.php?fid=${team.id}")
         documentList.add(firstDocument)
 
         val pageCount = parsePageCount(firstDocument.body().getElementsByClass("pages"))
         if(pageCount>1){
             for (i in 2..pageCount) {
                 println("Adding page $i")
-                documentList.add(connect("http://localhost/mybb/forumdisplay.php?fid=${team.id}&page=${i}"))
+                documentList.add(connect("https://forums.sim-football.com/forumdisplay.php?fid=${team.id}&page=${i}"))
             }
         }
 
@@ -54,7 +54,7 @@ class MyBBPlayerParser {
                                 try{
                                     val playerId = parsePlayerID(it)
                                     //println(playerId)
-                                    val playerPostDoc = connect("http://localhost/mybb/showthread.php?tid=${playerId}")
+                                    val playerPostDoc = connect("https://forums.sim-football.com/showthread.php?tid=${playerId}")
 
                                     try {
                                         val playerPost = playerPostDoc.body()
