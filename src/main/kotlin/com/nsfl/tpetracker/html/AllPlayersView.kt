@@ -9,7 +9,7 @@ fun DIV.allPlayersView(allPlayers: List<ActivePlayer>) = tablePage("All Players"
     array(
             allPlayers.map {
                 array(
-                        "<a href=\"http://nsfl.jcink.net/index.php?showtopic=${it.id}\">${it.user}</a>",
+                        "<a href=\"https://forums.sim-football.com/showthread.php?tid=${it.id}\">${it.user}</a>",
                         it.draftYear,
                         "<a href=\"${it.team.url}\">${it.team.full}</a>",
                         "<a href=\"/player?playerId=${it.id}\">${it.name}</a>",

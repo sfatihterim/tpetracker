@@ -12,22 +12,22 @@ import java.util.regex.Pattern
 
 class MyBBPlayerParser {
 
-    private val inputDateFormat = SimpleDateFormat("MM-dd-yyyy, HH:mm a")
+    private val inputDateFormat = SimpleDateFormat("MM-dd-yyyy',' hh:mm")
     private val lastSeenDateFormat = SimpleDateFormat("yyyy/MM/dd")
 
-    fun parseActivePlayers() = ArrayList<PlayerParser.ParsedPlayer>().apply {
+    fun parseActivePlayers() = ArrayList<ParsedPlayer>().apply {
         Team.values().forEach { addAll(parsePlayers(it)) }
     }
 
-    fun parsePlayers(team: Team): List<PlayerParser.ParsedPlayer> {
+    fun parsePlayers(team: Team): List<ParsedPlayer> {
 
-        val playerList = ArrayList<PlayerParser.ParsedPlayer>()
+        val playerList = ArrayList<ParsedPlayer>()
         val documentList = ArrayList<Document>()
 
         val firstDocument = connect("https://forums.sim-football.com/forumdisplay.php?fid=${team.id}")
         documentList.add(firstDocument)
 
-        val pageCount = parsePageCount(firstDocument.body().getElementsByClass("pages"))
+        val pageCount = parsePageCount(firstDocument.body().toString())
         if(pageCount>1){
             for (i in 2..pageCount) {
                 println("Adding page $i")
@@ -45,7 +45,6 @@ class MyBBPlayerParser {
                         }
                     }?.forEach { element ->
                         element.toString().let {
-                            //println(parsePlayerInfo(it))
 
                             val playerInfo = parsePlayerInfo(it).split("?")
 
@@ -53,14 +52,13 @@ class MyBBPlayerParser {
 
                                 try{
                                     val playerId = parsePlayerID(it)
-                                    //println(playerId)
                                     val playerPostDoc = connect("https://forums.sim-football.com/showthread.php?tid=${playerId}")
 
                                     try {
                                         val playerPost = playerPostDoc.body()
                                                             .getElementsByClass("post")[0]
 
-                                        val author = playerPost.getElementsByClass("author_information")[0]
+                                        val author = playerPost.getElementsByClass("post_author")[0]
                                         val user = author.getElementsByClass("largetext").text()
                                         val playerLink = author.getElementsByAttribute("href")[0].attr("href")
                                         val playerProfileDoc = connect(playerLink)
@@ -69,7 +67,7 @@ class MyBBPlayerParser {
                                         val attributes = playerPost.getElementsByClass("post_body").toString()
 
                                         playerList.add(
-                                                PlayerParser.ParsedPlayer(
+                                                ParsedPlayer(
                                                         playerId,
                                                         user.replace("'", "’"),
                                                         playerInfo[1].trim(),
@@ -115,12 +113,13 @@ class MyBBPlayerParser {
         return playerList
     }
 
-    private fun parsePageCount(pages: Elements): Int {
+    private fun parsePageCount(document: String): Int {
         return try {
-            val pagesString = pages.text()
-            val regex = """\(([0-9]+)\)""".toRegex()
-            val matchResult = regex.find(pagesString) ?: throw Exception()
-            return matchResult.groupValues[1].toInt()
+            val startIndex = document.indexOf("Pages (")
+            val endIndex = document.indexOf(")", startIndex)
+            document.substring(startIndex, endIndex)
+                    .replace(Pattern.compile("[^0-9.]").toRegex(), "")
+                    .toInt()
         } catch (exception: Exception) {
             1
         }
@@ -162,16 +161,19 @@ class MyBBPlayerParser {
     }
 
     fun parseUserName(playerID: String): String{
-      try {
-        val user = connect("http://nsfl.jcink.net/index.php?showtopic=$playerID")
-              .body()
-              .getElementsByClass("post-normal")[0]
-              .getElementsByClass("normalname")
-              .text()
-        return user.replace("'", "’")
-      } catch (exception: Exception) {
-        return "-"
-      }
+        try {
+            val con_user = connect("https://forums.sim-football.com/showthread.php?tid=$playerID") ?: throw Exception()
+            val user = con_user
+                    .body()
+                    .getElementsByClass("post")[0]
+                    .getElementsByClass("post_author")[0]
+                    .getElementsByClass("largetext")
+                    .text()
+
+            return user.replace("'", "’")
+        } catch (exception: Exception) {
+            return playerID
+        }
     }
 
     private fun parseProfileId(elementString: String): String {
@@ -215,16 +217,22 @@ class MyBBPlayerParser {
         }
 
         val lastSeenString = visit_elements[0].nextElementSibling().toString()
-        val regex = """([0-9]{2}-[0-9]{2}-[0-9]{4}, [0-9]{2}:[0-9]{2} [PA]M)""".toRegex()
+
+        if (lastSeenString.contains("(Hidden)"))
+            return lastSeenDateFormat.format(inputDateFormat.parse("01-01-1900, 00:00"))
+
+        val regex = "([0-9]{2}-[0-9]{2}-[0-9]{4}).*?([0-9]{2}:[0-9]{2} [PA]M)".toRegex()
         val matchResult = regex.find(lastSeenString) ?: throw Exception()
-        return lastSeenDateFormat.format(inputDateFormat.parse(matchResult.groupValues[1]))
+        return lastSeenDateFormat.format(inputDateFormat.parse(matchResult.groupValues[1] + ", " + matchResult.groupValues[2]))
 
     }
 
     private fun connect(url: String): Document {
         while (true) {
             try {
-                return Jsoup.connect(url).get()
+                return Jsoup.connect(url)
+                        .userAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:80.0) Gecko/20100101 Firefox/80.0")
+                        .get()
             } catch (exception: Exception) {
                 Logger.error("Jsoup.connect failed. $exception")
             }

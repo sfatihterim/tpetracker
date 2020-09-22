@@ -44,6 +44,7 @@ fun HTML.indexView() {
         container {
             row {
                 pageItem(url = "/baltimore_hawks", name = "Baltimore Hawks", imgSrc = "https://i.imgur.com/V7b1IrD.png")
+                pageItem(url = "/berlin_fire_salamanders", name = "Berlin Fire Salamanders", imgSrc ="https://cdn.discordapp.com/attachments/747977609454944339/754901898594746429/BERbanner.png")
                 pageItem(url = "/chicago_butchers", name = "Chicago Butchers", imgSrc = "https://cdn.discordapp.com/attachments/480923375913664524/588935077392547840/CHIBanner.png")
                 pageItem(url = "/colorado_yeti", name = "Colorado Yeti", imgSrc = "https://i.imgur.com/F82SkOe.png")
                 pageItem(url = "/philadelphia_liberty", name = "Philadelphia Liberty", imgSrc = "https://i.imgur.com/e26kJIj.png")
@@ -53,6 +54,7 @@ fun HTML.indexView() {
                 pageItem(url = "/austin_copperheads", name = "Austin Copperheads", imgSrc = "https://cdn.discordapp.com/attachments/480923375913664524/588936405548400641/AUSBanner.png")
                 pageItem(url = "/honolulu_hahalua", name = "Honolulu Hahalua", imgSrc = "https://cdn.discordapp.com/attachments/685587194861060146/697855640571478026/HONbanner.png")
                 pageItem(url = "/new_orleans_second_line", name = "New Orleans Second Line", imgSrc = "https://i.imgur.com/39Pv6j6.png")
+                pageItem(url = "/new_york_silverbacks", name = "New York Silverbacks", imgSrc = "https://cdn.discordapp.com/attachments/747977675355979857/754901932727861288/NYSbanner.png")
                 pageItem(url = "/orange_county_otters", name = "Orange County Otters", imgSrc = "https://i.imgur.com/A1jDLTx.png")
                 pageItem(url = "/san_jose_sabercats", name = "San Jose SaberCats", imgSrc = "https://i.imgur.com/WKAzCvY.png")
             }

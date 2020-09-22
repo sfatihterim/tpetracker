@@ -9,7 +9,7 @@ import kotlin.collections.ArrayList
 
 class PlayerDatabase {
 
-    fun updateActivePlayers(parsedPlayerList: List<PlayerParser.ParsedPlayer>): ArrayList<ActivePlayer> {
+    fun updateActivePlayers(parsedPlayerList: List<MyBBPlayerParser.ParsedPlayer>): ArrayList<ActivePlayer> {
 
         val saturday = SimpleDateFormat("MM/dd/yyyy").format(
                 Calendar.getInstance().apply {
@@ -123,7 +123,7 @@ class PlayerDatabase {
                     "SELECT * FROM players WHERE player_id='$playerId' ORDER BY id ASC"
             )
 
-            var user = PlayerParser().parseUserName(playerId)
+            var user = MyBBPlayerParser().parseUserName(playerId)
 
             while (playerResultSet.next()) {
 

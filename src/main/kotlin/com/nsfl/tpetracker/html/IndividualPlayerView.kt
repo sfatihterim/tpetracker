@@ -9,7 +9,7 @@ fun DIV.individualPlayerView(player: Player) {
     container {
         div {
             br {}
-            h2 { a(href = "http://nsfl.jcink.net/index.php?showtopic=${player.id}") { +player.name } }
+            h2 { a(href = "https://forums.sim-football.com/showthread.php?tid=${player.id}") { +player.name } }
             h5 { a(href = player.team.url) { +player.team.full } }
             +"${player.position.full} - ${player.draftYear}"
             br {}

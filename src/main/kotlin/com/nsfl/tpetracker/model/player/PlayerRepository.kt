@@ -5,7 +5,7 @@ import com.nsfl.tpetracker.model.team.Team
 
 class PlayerRepository {
 
-    private val playerParser = PlayerParser()
+    private val playerParser = MyBBPlayerParser()
     private val playerDatabase = PlayerDatabase()
     private val activePlayerList = ArrayList<ActivePlayer>()
     private val retiredPlayerList = ArrayList<RetiredPlayer>()
@@ -35,6 +35,9 @@ class PlayerRepository {
     fun getBaltimoreHawksPlayers() =
             activePlayerList.filter { it.team == Team.BALTIMORE_HAWKS }
 
+    fun getBerlinFireSalamandersPlayers() =
+            activePlayerList.filter { it.team == Team.BERLIN_FIRE_SALAMANDERS }
+
     fun getChicagoButchersPlayers() =
             activePlayerList.filter { it.team == Team.CHICAGO_BUTCHERS }
 
@@ -55,6 +58,9 @@ class PlayerRepository {
 
     fun getNewOrleansSecondLinePlayers() =
             activePlayerList.filter { it.team == Team.NEW_ORLEANS_SECOND_LINE }
+
+    fun getNewYorkSilverbacksPlayers() =
+            activePlayerList.filter { it.team == Team.NEW_YORK_SILVERBACKS }
 
     fun getOrangeCountyOttersPlayers() =
             activePlayerList.filter { it.team == Team.ORANGE_COUNTY_OTTERS }

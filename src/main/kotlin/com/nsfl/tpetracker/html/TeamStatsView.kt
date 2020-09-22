@@ -9,7 +9,7 @@ fun DIV.teamStatsView(nsflList: List<Pair<Team, List<ActivePlayer>>>, dsflList: 
 
     array(nsflList.map { pair ->
         array(
-                "NSFL",
+                "ISFL",
                 "<a href=\"${pair.first.url}\">${pair.first.full}</a>",
                 pair.second.getTotalTPE(),
                 pair.second.getAverageTPE(),

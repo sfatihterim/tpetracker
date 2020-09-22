@@ -101,6 +101,7 @@ class Application {
     fun getTeamStats() = htmlGenerator.createTeamStatsPage(
             listOf(
                     Pair(Team.BALTIMORE_HAWKS, playerRepository.getBaltimoreHawksPlayers()),
+                    Pair(Team.BERLIN_FIRE_SALAMANDERS, playerRepository.getBerlinFireSalamandersPlayers()),
                     Pair(Team.CHICAGO_BUTCHERS, playerRepository.getChicagoButchersPlayers()),
                     Pair(Team.COLORADO_YETI, playerRepository.getColoradoYetiPlayers()),
                     Pair(Team.PHILADELPHIA_LIBERTY, playerRepository.getPhiladelphiaLibertyPlayers()),
@@ -110,6 +111,7 @@ class Application {
                     Pair(Team.AUSTIN_COPPERHEADS, playerRepository.getAustinCopperheadsPlayers()),
                     Pair(Team.HONOLULU_HAHALUA, playerRepository.getHonoluluHahaluaPlayers()),
                     Pair(Team.NEW_ORLEANS_SECOND_LINE, playerRepository.getNewOrleansSecondLinePlayers()),
+                    Pair(Team.NEW_YORK_SILVERBACKS, playerRepository.getNewYorkSilverbacksPlayers()),
                     Pair(Team.ORANGE_COUNTY_OTTERS, playerRepository.getOrangeCountyOttersPlayers()),
                     Pair(Team.SAN_JOSE_SABERCATS, playerRepository.getSanJoseSabercatsPlayers())
             ),
@@ -155,6 +157,12 @@ class Application {
             playerRepository.getBaltimoreHawksPlayers()
     )
 
+    @RequestMapping("/berlin_fire_salamanders")
+    fun getBerlinFireSalamandersPlayers() = htmlGenerator.createTeamPage(
+            Team.BERLIN_FIRE_SALAMANDERS,
+            playerRepository.getBerlinFireSalamandersPlayers()
+    )
+
     @RequestMapping("/chicago_butchers")
     fun getChicagoButchersPlayers() = htmlGenerator.createTeamPage(
             Team.CHICAGO_BUTCHERS,
@@ -195,6 +203,12 @@ class Application {
     fun getNewOrleansSecondLinePlayers() = htmlGenerator.createTeamPage(
             Team.NEW_ORLEANS_SECOND_LINE,
             playerRepository.getNewOrleansSecondLinePlayers()
+    )
+
+    @RequestMapping("/new_york_silverbacks")
+    fun getNewYorkSilverbacksPlayers() = htmlGenerator.createTeamPage(
+            Team.NEW_YORK_SILVERBACKS,
+            playerRepository.getNewYorkSilverbacksPlayers()
     )
 
     @RequestMapping("/orange_county_otters")

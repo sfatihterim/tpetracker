@@ -46,8 +46,9 @@ fun HTML.navbarTemplate(title: String, contents: DIV.() -> Unit) {
                     navItem(href = "/position_stats") { +"Position Stats" }
                     navItem(href = "/activity_check_query") { +"Activity Check" }
 
-                    navItemDropdown(name = "NSFL") {
+                    navItemDropdown(name = "ISFL") {
                         dropdownItem(href = "/baltimore_hawks") { +"Baltimore Hawks" }
+                        dropdownItem(href = "/berlin_fire_salamanders") { +"Berlin Fire Salamanders" }
                         dropdownItem(href = "/chicago_butchers") { +"Chicago Butchers" }
                         dropdownItem(href = "/colorado_yeti") { +"Colorado Yeti" }
                         dropdownItem(href = "/philadelphia_liberty") { +"Philadelphia Liberty" }
@@ -57,6 +58,7 @@ fun HTML.navbarTemplate(title: String, contents: DIV.() -> Unit) {
                         dropdownItem(href = "/austin_copperheads") { +"Austin Copperheads" }
                         dropdownItem(href = "/honolulu_hahalua") { +"Honolulu Hahalua" }
                         dropdownItem(href = "/new_orleans_second_line") { +"New Orleans Second Line" }
+                        dropdownItem(href = "/new_york_silverbacks") { +"New York Silverbacks" }
                         dropdownItem(href = "/orange_county_otters") { +"Orange County Otters" }
                         dropdownItem(href = "/san_jose_sabercats") { +"San Jose SaberCats" }
                     }
