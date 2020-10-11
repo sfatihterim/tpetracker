@@ -30,7 +30,9 @@ fun DIV.allPlayersView(allPlayers: List<ActivePlayer>) = tablePage("All Players"
                         it.runBlocking,
                         it.endurance,
                         it.kickPower,
-                        it.kickAccuracy
+                        it.kickAccuracy,
+                        it.height,
+                        it.weight
                 )
             }
     )

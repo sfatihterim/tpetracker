@@ -94,7 +94,9 @@ class MyBBPlayerParser {
                                                         parsePlayerAttribute(attributes, "endurance:"),
                                                         parsePlayerAttribute(attributes, "kick power:"),
                                                         parsePlayerAttribute(attributes, "kick accuracy:"),
-                                                        parseLastSeen(playerProfile)
+                                                        parseLastSeen(playerProfile),
+                                                        parsePlayerAttribute(attributes, "Height (ft.):"),
+                                                        parsePlayerAttribute(attributes, "Weight (lbs.):")
                                                 )
                                         )
                                 } catch (exception: Exception) {
@@ -190,6 +192,40 @@ class MyBBPlayerParser {
             var finished = false
             var index = post.indexOf(attributeName, ignoreCase = true)
 
+            if (attributeName == "Height (ft.):") {
+
+                while (!finished) {
+
+                    val char = post[index]
+
+                    if (started && char.compareTo(10.toChar()) != 0) {
+                        attribute += char
+                    }else if (char.isDigit()) {
+                        started = true
+                        attribute += char
+                    } else if (char.compareTo(10.toChar()) == 0) {
+                        finished = true
+                    }
+
+                    index++
+                }
+
+                val regex = Regex("(\\d)\\D{0,5}(\\d{0,2})")
+                var match = regex.find(attribute)
+
+                if (match == null) {
+                    attribute = "-999"
+                } else {
+                    var heightInInches = Integer.valueOf(match.groupValues[1]) * 12
+
+                    if (match.groupValues[2].isNotEmpty()) {
+                        heightInInches += Integer.valueOf(match.groupValues[2])
+                    }
+
+                    attribute = heightInInches.toString()
+                }
+            }
+
             while (!finished) {
 
                 val char = post[index]
@@ -260,6 +296,8 @@ class MyBBPlayerParser {
             val endurance: Int,
             val kickPower: Int,
             val kickAccuracy: Int,
-            val lastSeen: String
+            val lastSeen: String,
+            val height: Int,
+            val weight: Int
     )
 }

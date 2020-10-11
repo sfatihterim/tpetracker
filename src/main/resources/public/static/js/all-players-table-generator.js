@@ -11,7 +11,7 @@ $(document).ready(function () {
             }
         }, {
             text: "Toggle Attributes", action: function () {
-                t.columns([9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21]).visible(!t.column(9).visible())
+                t.columns([9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23]).visible(!t.column(9).visible())
             }
         }, {extend: 'colvis', text: 'Toggle Columns'}, {
             extend: 'collection',
@@ -68,6 +68,6 @@ $(document).ready(function () {
             autoClose: true
         }],
         data: dataSet,
-        columns: [{title: "User"}, {title: "Draft Year"}, {title: "Team"}, {title: "Name"}, {title: "Position"}, {title: "Current TPE"}, {title: "Highest TPE"}, {title: "Last Updated"}, {title: "Last Seen"}, {title: "Str"}, {title: "Agi"}, {title: "Arm"}, {title: "Int"}, {title: "Thr"}, {title: "Tck"}, {title: "Spd"}, {title: "Hnd"}, {title: "PBlk"}, {title: "RBlk"}, {title: "End"}, {title: "KPow"}, {title: "KAcc"}]
+        columns: [{title: "User"}, {title: "Draft Year"}, {title: "Team"}, {title: "Name"}, {title: "Position"}, {title: "Current TPE"}, {title: "Highest TPE"}, {title: "Last Updated"}, {title: "Last Seen"}, {title: "Str"}, {title: "Agi"}, {title: "Arm"}, {title: "Int"}, {title: "Thr"}, {title: "Tck"}, {title: "Spd"}, {title: "Hnd"}, {title: "PBlk"}, {title: "RBlk"}, {title: "End"}, {title: "KPow"}, {title: "KAcc"}, {title: "Height (inches)"}, {title: "Weight (lbs)"}]
     })
 });
